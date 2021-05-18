@@ -51,6 +51,7 @@ public class CustomerService {
         customerToUpdate.setCustomerFax(newCustomer.getCustomerFax());
         customerToUpdate.setCustomerPhone(newCustomer.getCustomerPhone());
         customerToUpdate.setCustomerContactPerson(newCustomer.getCustomerContactPerson());
+        customerToUpdate.setCustomerEmail(newCustomer.getCustomerEmail());
         return customerToUpdate;
     }
 }

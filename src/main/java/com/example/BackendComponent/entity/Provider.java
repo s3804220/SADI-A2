@@ -24,14 +24,18 @@ public class Provider {
     @Column
     private String providerContactPerson;
 
+    @Column
+    private String providerEmail;
+
     public Provider(){};
 
-    public Provider(String providerName, String providerAddress, String providerPhone, String providerFax, String providerContactPerson) {
+    public Provider(String providerName, String providerAddress, String providerPhone, String providerFax, String providerContactPerson, String providerEmail) {
         this.providerName = providerName;
         this.providerAddress = providerAddress;
         this.providerPhone = providerPhone;
         this.providerFax = providerFax;
         this.providerContactPerson = providerContactPerson;
+        this.providerEmail = providerEmail;
     }
 
     public Long getproviderID() {
@@ -80,5 +84,13 @@ public class Provider {
 
     public void setproviderContactPerson(String providerContactPerson) {
         this.providerContactPerson = providerContactPerson;
+    }
+
+    public String getProviderEmail() {
+        return providerEmail;
+    }
+
+    public void setProviderEmail(String providerEmail) {
+        this.providerEmail = providerEmail;
     }
 }
