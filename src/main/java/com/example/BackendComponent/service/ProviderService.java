@@ -43,13 +43,14 @@ public class ProviderService {
         return providerToDelete;
     }
 
-    public Provider updateprovider(Long id, Provider newprovider){
+    public Provider updateprovider(Long id, Provider newProvider){
         Provider providerToUpdate = getproviderByID(id);
-        providerToUpdate.setproviderName(newprovider.getproviderName());
-        providerToUpdate.setproviderAddress(newprovider.getproviderAddress());
-        providerToUpdate.setproviderFax(newprovider.getproviderFax());
-        providerToUpdate.setproviderPhone(newprovider.getproviderPhone());
-        providerToUpdate.setproviderContactPerson(newprovider.getproviderContactPerson());
+        providerToUpdate.setproviderName(newProvider.getproviderName());
+        providerToUpdate.setproviderAddress(newProvider.getproviderAddress());
+        providerToUpdate.setproviderFax(newProvider.getproviderFax());
+        providerToUpdate.setproviderPhone(newProvider.getproviderPhone());
+        providerToUpdate.setproviderContactPerson(newProvider.getproviderContactPerson());
+        providerToUpdate.setProviderEmail(newProvider.getProviderEmail());
         return providerToUpdate;
     }
 }

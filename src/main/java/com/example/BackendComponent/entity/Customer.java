@@ -24,14 +24,18 @@ public class Customer {
     @Column
     private String customerContactPerson;
 
+    @Column
+    private String customerEmail;
+
     public Customer(){};
 
-    public Customer(String customerName, String customerAddress, String customerPhone, String customerFax, String customerContactPerson) {
+    public Customer(String customerName, String customerAddress, String customerPhone, String customerFax, String customerContactPerson, String customerEmail) {
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.customerPhone = customerPhone;
         this.customerFax = customerFax;
         this.customerContactPerson = customerContactPerson;
+        this.customerEmail = customerEmail;
     }
 
     public Long getCustomerID() {
@@ -80,5 +84,13 @@ public class Customer {
 
     public void setCustomerContactPerson(String customerContactPerson) {
         this.customerContactPerson = customerContactPerson;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 }
