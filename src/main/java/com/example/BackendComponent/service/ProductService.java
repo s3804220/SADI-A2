@@ -1,7 +1,7 @@
 package com.example.BackendComponent.service;
 
 import com.example.BackendComponent.entity.Product;
-import com.example.BackendComponent.excenption.ProductNotFoundException;
+import com.example.BackendComponent.exception.ProductNotFoundException;
 import com.example.BackendComponent.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

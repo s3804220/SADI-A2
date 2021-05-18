@@ -1,13 +1,10 @@
 package com.example.BackendComponent.service;
 
-import com.example.BackendComponent.excenption.CategoryNotFoundException;
+import com.example.BackendComponent.exception.CategoryNotFoundException;
 import com.example.BackendComponent.repository.CategoryRepository;
-import com.example.BackendComponent.repository.ProductRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.Caret;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;

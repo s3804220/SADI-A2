@@ -1,4 +1,4 @@
-package com.example.BackendComponent.excenption;
+package com.example.BackendComponent.exception;
 
 import java.text.MessageFormat;
 
