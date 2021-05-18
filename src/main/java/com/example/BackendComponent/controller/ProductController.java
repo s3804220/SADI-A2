@@ -20,31 +20,27 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<ItemDto> addProduct(@RequestBody final ItemDto itemDto){
-//
-//    }
-
-    //    @Autowired
-//    private ProductService productService;
-//
     @GetMapping(path="/products")
     public List<Product> getAllProducts(){
         return productService.getAllProducts();
     }
+
     @GetMapping(path="/products/{id}")
     public Product getProductById(@PathVariable final Long id){
         return productService.getProductById(id);
     }
+
     @PostMapping(path="/products")
     public Product addProduct(@RequestBody Product product){
         return productService.addProduct(product);
     }
-    @DeleteMapping(path="products/{id}")
+
+    @DeleteMapping(path="/products/{id}")
     public Product deleteProduct(@PathVariable final Long id){
         return productService.deleteProduct(id);
     }
-    @PutMapping(path="products/{id}")
+
+    @PutMapping(path="/products/{id}")
     public Product updateProduct(@PathVariable final Long id, @RequestBody final Product product){
         return productService.updateProduct(id, product);
     }

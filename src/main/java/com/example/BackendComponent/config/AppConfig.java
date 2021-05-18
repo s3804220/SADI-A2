@@ -32,7 +32,14 @@ public class AppConfig {
     @Bean
     public Product product(){return new Product();}
 
+    @Bean
+    public Staff staff(){return new Staff();}
 
+    @Bean
+    public Customer customer(){return new Customer();}
+
+    @Bean
+    public Provider provider(){return new Provider();}
 //    @Bean
 //    public JdbcTemplate jdbcTemplate(){return new JdbcTemplate();}
 
