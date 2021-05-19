@@ -95,11 +95,4 @@ public class Order {
     public void deleteOrderStaff(){
         this.orderStaff = null;
     }
-
-//    public Float getOrderTotalPrice(){
-//        if (this.orderProduct == null){
-//            return null;
-//        }
-//        return this.orderProduct.getPrice() * this.orderQuantity;
-//    }
 }

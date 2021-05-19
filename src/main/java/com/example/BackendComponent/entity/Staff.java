@@ -88,4 +88,14 @@ public class Staff {
     public void addStaffOrders(Order order){this.staffOrders.add(order);}
 
     public void deleteStaffOrders(Order order){this.staffOrders.remove(order);}
+
+    @Override
+    public String toString() {
+        return "Staff{" +
+                "staffName='" + staffName + '\'' +
+                ", staffAddress='" + staffAddress + '\'' +
+                ", staffPhone='" + staffPhone + '\'' +
+                ", staffEmail='" + staffEmail + '\'' +
+                '}';
+    }
 }

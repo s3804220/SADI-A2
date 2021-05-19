@@ -23,7 +23,6 @@ public class Category {
     private String categoryName;
 
     @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name="product_id")
     private Set<Product> products;
 
     public Category(){}
@@ -53,12 +52,4 @@ public class Category {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
-//    public Set<Product> getProducts() {
-//        return products;
-//    }
-//
-//    public void setProducts(Set<Product> products) {
-//        this.products = products;
-//    }
 }

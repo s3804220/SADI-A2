@@ -47,4 +47,10 @@ public class OrderService {
         return orderToUpdate;
     }
 
+
+    public String getOrderDetails(Long orderID){
+        Order order = getOrderByID(orderID);
+        return order.getOrderProduct().toString() + "\n" +order.getOrderStaff() + "\nOrder Quantity: " + order.getOrderQuantity() +
+                "\nOrder Total Price: $" + order.getOrderQuantity()*order.getOrderProduct().getPrice();
+    }
 }
