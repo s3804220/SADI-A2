@@ -2,6 +2,8 @@ package com.example.BackendComponent.controller;
 
 import java.util.List;
 
+import com.example.BackendComponent.entity.Category;
+import com.example.BackendComponent.service.UnifiedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +14,12 @@ import com.example.BackendComponent.service.ProductService;
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
+    private final UnifiedService unifiedService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, UnifiedService unifiedService, UnifiedService unifiedService1) {
         this.productService = productService;
+        this.unifiedService = unifiedService1;
     }
 
     @GetMapping(path="/products")
@@ -43,13 +47,13 @@ public class ProductController {
         return productService.updateProduct(id, product);
     }
 
-    @PostMapping(path="/products/{productID}/orders/{orderID}/add")
-    public Product addProductToOrder(@PathVariable Long productID, @PathVariable Long orderID){
-        return productService.addProductToOrder(productID, orderID);
+    @PostMapping(path="/products/{productID}/category/{categoryID}")
+    public Category addProductToCategory(@PathVariable final Long productID, @PathVariable final Long categoryID){
+        return unifiedService.addProductToCategory(categoryID, productID);
     }
 
-    @DeleteMapping(path="/products/{productID}/orders/{orderID}/delete")
-    public Product removeProductFromOrder(@PathVariable Long productID, @PathVariable Long orderID){
-        return productService.removeProductFromOrder(productID, orderID);
+    @DeleteMapping(path="/products/{productID}/category/{categoryID}")
+    public Category deleteProductFromCategory(@PathVariable final Long productID, @PathVariable final Long categoryID){
+        return unifiedService.removeProductFromCategory(categoryID, productID);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.BackendComponent.service;
 
-import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.exception.ProductNotFoundException;
 import com.example.BackendComponent.repository.ProductRepository;
@@ -11,17 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
 @Transactional
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final OrderService orderService;
 
     @Autowired
     public ProductService(ProductRepository productRepository, OrderService orderService) {
         this.productRepository = productRepository;
-        this.orderService = orderService;
     }
 
     public Product addProduct(Product product){
@@ -54,21 +50,5 @@ public class ProductService {
         productToEdit.setDescription(newProduct.getDescription());
         productToEdit.setModel(newProduct.getModel());
         return productToEdit;
-    }
-
-    public Product addProductToOrder(Long productID, Long orderId){
-        Product product = getProductById(productID);
-        Order order = orderService.getOrderByID(orderId);
-        product.addProductOrder(order);
-        order.setOrderProduct(product);
-        return product;
-    }
-
-    public Product removeProductFromOrder(Long productID, Long orderID){
-        Product product = getProductById(productID);
-        Order order = orderService.getOrderByID(orderID);
-        product.deleteProductOrder(order);
-        order.deleteOrderProduct();
-        return product;
     }
 }

@@ -52,21 +52,7 @@ public class CategoryService {
         return categoryToUpdate;
     }
 
-    public Category addProductToCategory(Long categoryID, Long productID){
-        Category category = getCategoryById(categoryID);
-        Product product = productService.getProductById(productID);
-        category.addProduct(product);
-        product.setCategory(category);
-        return category;
-    }
 
-    public Category removeProductFromCategory(Long categoryID, Long productID){
-        Category category = getCategoryById(categoryID);
-        Product product = productService.getProductById(productID);
-        category.removeProduct(product);
-        product.deleteCategory();
-        return category;
-    }
 //    @Autowired
 //    private SessionFactory sessionFactory;
 //    public void setSessionFactory(SessionFactory sessionFactory){this.sessionFactory = sessionFactory;}

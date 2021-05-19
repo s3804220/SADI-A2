@@ -43,36 +43,4 @@ public class CategoryController {
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
         return categoryService.updateCategory(id, category);
     }
-
-    @PostMapping(path="/categories/{categoryID}/product/{productID}/add")
-    public Category addProductToCategory(@PathVariable final Long categoryID, @PathVariable final Long productID){
-        return categoryService.addProductToCategory(categoryID, productID);
-    }
-
-    @DeleteMapping(path="/categories/{categoryID}/product/{productID}/delete")
-    public Category deleteProductFromCategory(@PathVariable final Long categoryID, @PathVariable final Long productID){
-        return categoryService.removeProductFromCategory(categoryID, productID);
-    }
-    //    @Autowired
-//    private CategoryService categoryService;
-//
-//    @Autowired
-//    private CategoryRepository repo;
-//
-//    @RequestMapping(path="/categories", method=RequestMethod.GET)
-//    public List<Category> getAllCategories(){
-//        return categoryService.getAllCategories();
-//    }
-//
-//    @RequestMapping(path="/categories", method=RequestMethod.POST)
-//    public Category addCategory(@RequestBody Category category){
-////        repo.save(category);
-//        return categoryService.addCategory(category);
-//    }
-//
-//    @RequestMapping(path="/categories/{id}", method=RequestMethod.GET)
-//    public List<Category> getCategoryByID(@PathVariable Long id){
-//        return categoryService.getCategoryById(id);
-//    }
-
 }

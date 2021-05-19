@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.BackendComponent.entity.Staff;
 import com.example.BackendComponent.service.StaffService;
+import com.example.BackendComponent.service.UnifiedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class StaffController {
     private final StaffService staffService;
+    private final UnifiedService unifiedService;
 
     @Autowired
-    public StaffController(StaffService staffService) {
+    public StaffController(StaffService staffService, UnifiedService unifiedService) {
         this.staffService = staffService;
+        this.unifiedService = unifiedService;
     }
 
     @GetMapping(path="/staffs")
@@ -33,15 +36,5 @@ public class StaffController {
     @PutMapping(path="/staffs/{id}")
     public Staff updateStaff(@PathVariable final Long id, @RequestBody final Staff staff){
         return staffService.updateStaff(id, staff);
-    }
-
-    @PostMapping(path="/staffs/{staff_id}/orders/{order_id}/add")
-    public Staff addStaffToOrder(@PathVariable Long staff_id, @PathVariable Long order_id){
-        return staffService.addStaffToOrder(staff_id, order_id);
-    }
-
-    @DeleteMapping(path="/staffs/{staff_id}/orders/{order_id}/delete")
-    public Staff removeStaffFromOrder(@PathVariable Long staff_id, @PathVariable Long order_id){
-        return staffService.removeStaffFromOrder(staff_id, order_id);
     }
 }
