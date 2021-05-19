@@ -33,4 +33,14 @@ public class ProviderController {
 
     @DeleteMapping(path="/providers/{id}")
     public Provider deleteprovider(@PathVariable Long id){return providerService.deleteprovider(id);}
+
+    @PostMapping(path="/providers/{provider_id}/orders/{order_id}/add")
+    public Provider addProviderToOrder(@PathVariable Long provider_id, @PathVariable Long order_id){
+        return providerService.addProviderToOrder(provider_id, order_id);
+    }
+
+    @DeleteMapping(path="/providers/{provider_id}/orders/{order_id}/delete")
+    public Provider deleteProviderFromOrder(@PathVariable Long provider_id, @PathVariable Long order_id){
+        return providerService.removeProviderFromOrder(provider_id, order_id);
+    }
 }

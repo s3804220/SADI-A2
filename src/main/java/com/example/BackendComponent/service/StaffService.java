@@ -1,5 +1,6 @@
 package com.example.BackendComponent.service;
 
+import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.exception.StaffNotFoundException;
 import com.example.BackendComponent.repository.StaffRepository;
 
@@ -11,16 +12,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.example.BackendComponent.entity.*;
+import com.example.BackendComponent.entity.Staff;
 
 @Transactional
 @Service
 public class StaffService {
     private final StaffRepository staffRepository;
+    private final OrderService orderService;
 
     @Autowired
-    public StaffService(StaffRepository staffRepository) {
+    public StaffService(StaffRepository staffRepository, OrderService orderService) {
         this.staffRepository = staffRepository;
+        this.orderService = orderService;
     }
 
     public Staff addStaff(Staff staff){
@@ -53,5 +56,21 @@ public class StaffService {
         staffToEdit.setStaffAddress(newStaff.getStaffAddress());
 
         return staffToEdit;
+    }
+
+    public Staff addStaffToOrder(Long staffID, Long orderID){
+        Staff staff = getStaffByID(staffID);
+        Order order = orderService.getOrderByID(orderID);
+        staff.addStaffOrders(order);
+        order.setOrderStaff(staff);
+        return staff;
+    }
+
+    public Staff removeStaffFromOrder(Long staffID, Long orderID){
+        Staff staff = getStaffByID(staffID);
+        Order order = orderService.getOrderByID(orderID);
+        staff.deleteStaffOrders(order);
+        order.deleteOrderStaff();
+        return staff;
     }
 }

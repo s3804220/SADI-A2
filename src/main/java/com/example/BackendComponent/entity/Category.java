@@ -22,7 +22,7 @@ public class Category {
     @Column
     private String categoryName;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name="product_id")
     private Set<Product> products;
 
