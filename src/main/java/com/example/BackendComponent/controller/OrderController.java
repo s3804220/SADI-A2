@@ -76,4 +76,9 @@ public class OrderController {
     public Provider deleteProviderFromOrder(@PathVariable Long orderID, @PathVariable Long providerID){
         return unifiedService.removeProviderFromOrder(providerID, orderID);
     }
+
+    @GetMapping(path="/orders/{orderID}/details")
+    public String getOrderDetails(@PathVariable Long orderID){
+        return orderService.getOrderDetails(orderID);
+    }
 }

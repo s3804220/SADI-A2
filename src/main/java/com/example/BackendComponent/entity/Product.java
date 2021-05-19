@@ -131,4 +131,16 @@ public class Product {
        this.productOrders.remove(order);
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName + '\'' +
+                ", model='" + model + '\'' +
+                ", brand='" + brand + '\'' +
+                ", company='" + company + '\'' +
+                ", description='" + description + '\'' +
+                ", pricePerUnit=" + price +
+                ", category=" + category.getCategoryName() +
+                '}';
+    }
 }
