@@ -40,6 +40,9 @@ public class AppConfig {
 
     @Bean
     public Provider provider(){return new Provider();}
+
+    @Bean
+    public Order order(){return new Order();}
 //    @Bean
 //    public JdbcTemplate jdbcTemplate(){return new JdbcTemplate();}
 

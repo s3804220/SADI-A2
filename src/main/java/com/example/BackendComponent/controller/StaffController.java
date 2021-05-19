@@ -34,4 +34,14 @@ public class StaffController {
     public Staff updateStaff(@PathVariable final Long id, @RequestBody final Staff staff){
         return staffService.updateStaff(id, staff);
     }
+
+    @PostMapping(path="/staffs/{staff_id}/orders/{order_id}/add")
+    public Staff addStaffToOrder(@PathVariable Long staff_id, @PathVariable Long order_id){
+        return staffService.addStaffToOrder(staff_id, order_id);
+    }
+
+    @DeleteMapping(path="/staffs/{staff_id}/orders/{order_id}/delete")
+    public Staff removeStaffFromOrder(@PathVariable Long staff_id, @PathVariable Long order_id){
+        return staffService.removeStaffFromOrder(staff_id, order_id);
+    }
 }

@@ -1,9 +1,9 @@
 package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -34,6 +34,10 @@ public class Product {
     @ManyToOne
     @JsonIgnore
     private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Order> productOrders;
 
     public Product(String productName, String model, String brand, String company, String description, float price){
         super();
@@ -112,4 +116,19 @@ public class Product {
     }
 
     public void deleteCategory(){ this.category = null;}
+
+    public Set<Order> getProductOrders() {
+        return productOrders;
+    }
+
+    public void setProductOrders(Set<Order> productOrders) {
+        this.productOrders = productOrders;
+    }
+    public void addProductOrder(Order order){
+        this.productOrders.add(order);
+    }
+    public void deleteProductOrder(Order order){
+       this.productOrders.remove(order);
+    }
+
 }

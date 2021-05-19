@@ -3,8 +3,6 @@ package com.example.BackendComponent.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.entity.Product;
@@ -43,5 +41,15 @@ public class ProductController {
     @PutMapping(path="/products/{id}")
     public Product updateProduct(@PathVariable final Long id, @RequestBody final Product product){
         return productService.updateProduct(id, product);
+    }
+
+    @PostMapping(path="/products/{productID}/orders/{orderID}/add")
+    public Product addProductToOrder(@PathVariable Long productID, @PathVariable Long orderID){
+        return productService.addProductToOrder(productID, orderID);
+    }
+
+    @DeleteMapping(path="/products/{productID}/orders/{orderID}/delete")
+    public Product removeProductFromOrder(@PathVariable Long productID, @PathVariable Long orderID){
+        return productService.removeProductFromOrder(productID, orderID);
     }
 }

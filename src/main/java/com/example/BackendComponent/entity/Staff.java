@@ -1,5 +1,8 @@
 package com.example.BackendComponent.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="staff")
@@ -20,6 +23,10 @@ public class Staff {
 
     @Column
     private String staffEmail;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Order> staffOrders;
 
     public Staff(){};
 
@@ -69,4 +76,16 @@ public class Staff {
     public void setStaffEmail(String staffEmail) {
         this.staffEmail = staffEmail;
     }
+
+    public Set<Order> getStaffOrders() {
+        return staffOrders;
+    }
+
+    public void setStaffOrders(Set<Order> staffOrders) {
+        this.staffOrders = staffOrders;
+    }
+
+    public void addStaffOrders(Order order){this.staffOrders.add(order);}
+
+    public void deleteStaffOrders(Order order){this.staffOrders.remove(order);}
 }
