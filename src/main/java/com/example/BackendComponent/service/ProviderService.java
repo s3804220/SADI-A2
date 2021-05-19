@@ -24,7 +24,7 @@ public class ProviderService {
         this.orderService = orderService;
     }
 
-    public Provider addprovider(Provider provider){
+    public Provider addProvider(Provider provider){
         return providerRepository.save(provider);
     }
 
@@ -34,19 +34,19 @@ public class ProviderService {
                 .collect(Collectors.toList());
     }
 
-    public Provider getproviderByID(Long id){
+    public Provider getProviderByID(Long id){
         return providerRepository.findById(id).orElseThrow(()->
                 new ProviderNotFoundException(id));
     }
 
-    public Provider deleteprovider(Long id){
-        Provider providerToDelete = getproviderByID(id);
+    public Provider deleteProvider(Long id){
+        Provider providerToDelete = getProviderByID(id);
         providerRepository.delete(providerToDelete);
         return providerToDelete;
     }
 
-    public Provider updateprovider(Long id, Provider newProvider){
-        Provider providerToUpdate = getproviderByID(id);
+    public Provider updateProvider(Long id, Provider newProvider){
+        Provider providerToUpdate = getProviderByID(id);
         providerToUpdate.setproviderName(newProvider.getproviderName());
         providerToUpdate.setproviderAddress(newProvider.getproviderAddress());
         providerToUpdate.setproviderFax(newProvider.getproviderFax());
@@ -54,21 +54,5 @@ public class ProviderService {
         providerToUpdate.setproviderContactPerson(newProvider.getproviderContactPerson());
         providerToUpdate.setProviderEmail(newProvider.getProviderEmail());
         return providerToUpdate;
-    }
-
-    public Provider addProviderToOrder(Long providerID, Long orderID){
-        Provider provider = getproviderByID(providerID);
-        Order order = orderService.getOrderByID(orderID);
-        provider.addProviderOrder(order);
-        order.setOrderProvider(provider);
-        return provider;
-    }
-
-    public Provider removeProviderFromOrder(Long providerID, Long orderID){
-        Provider provider = getproviderByID(providerID);
-        Order order = orderService.getOrderByID(orderID);
-        provider.deleteProviderOrder(order);
-        order.deleteOrderProvider();
-        return provider;
     }
 }
