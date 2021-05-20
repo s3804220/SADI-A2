@@ -60,10 +60,7 @@ public class ProductController {
     }
 
     @RequestMapping(path="/products/search")
-    public List<Product> searchProduct(Model model, @Param("keyword") String keyword){
-        List<Product>  productList = productService.getAllProducts(keyword);
-        model.addAttribute("productList", productList);
-        model.addAttribute("keyword", keyword);
-        return productList;
+    public List<Product> searchProduct(@Param("keyword") String keyword){
+        return productService.getAllProducts(keyword);
     }
 }

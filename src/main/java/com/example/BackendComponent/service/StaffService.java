@@ -24,7 +24,10 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
-    public List<Staff> getAllStaffs(){
+    public List<Staff> getAllStaffs(String keyword){
+        if (keyword != null){
+            return staffRepository.search(keyword);
+        }
         return StreamSupport
                 .stream(staffRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

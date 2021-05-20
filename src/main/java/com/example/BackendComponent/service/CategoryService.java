@@ -29,7 +29,10 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public List<Category> getAllCategories(){
+    public List<Category> getAllCategories(String keyword){
+        if (keyword != null){
+            return categoryRepository.search(keyword);
+        }
         return StreamSupport
                 .stream(categoryRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
@@ -51,22 +54,4 @@ public class CategoryService {
         categoryToUpdate.setCategoryName(category.getCategoryName());
         return categoryToUpdate;
     }
-
-
-//    @Autowired
-//    private SessionFactory sessionFactory;
-//    public void setSessionFactory(SessionFactory sessionFactory){this.sessionFactory = sessionFactory;}
-//
-//    public List<Category> getAllCategories(){
-//        return this.sessionFactory.getCurrentSession().createQuery("from Category").list();
-//    }
-//
-//    public Category addCategory(Category category){
-//        sessionFactory.getCurrentSession().save(category);
-//        return category;
-//    }
-//
-//    public List<Category> findCategoryById(Long ID){
-//        return this.sessionFactory.getCurrentSession().createQuery("from Category c where c.categoryID = " + ID).list();
-//    }
 }

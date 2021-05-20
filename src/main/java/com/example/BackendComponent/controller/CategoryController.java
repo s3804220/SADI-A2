@@ -3,6 +3,8 @@ package com.example.BackendComponent.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.entity.Category;
@@ -26,7 +28,7 @@ public class CategoryController {
 
     @GetMapping(path="/categories")
     public List<Category> getAllCategories(){
-        return categoryService.getAllCategories();
+        return categoryService.getAllCategories(null);
     }
 
     @GetMapping(path="/categories/{id}")
@@ -42,5 +44,10 @@ public class CategoryController {
     @PutMapping(path="/categories/{id}")
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
         return categoryService.updateCategory(id, category);
+    }
+
+    @RequestMapping(path="/categories/search")
+    public List<Category> searchCategory(@Param("keyword") String keyword){
+        return categoryService.getAllCategories(keyword);
     }
 }

@@ -28,7 +28,10 @@ public class ProviderService {
         return providerRepository.save(provider);
     }
 
-    public List<Provider> getAllprovider(){
+    public List<Provider> getAllprovider(String keyword){
+        if (keyword != null){
+            return providerRepository.search(keyword);
+        }
         return StreamSupport
                 .stream(providerRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
