@@ -133,14 +133,16 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        String output=
                 "productName='" + productName + '\'' +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
                 ", company='" + company + '\'' +
                 ", description='" + description + '\'' +
-                ", pricePerUnit=" + price +
-                ", category=" + category.getCategoryName() +
-                '}';
+                ", pricePerUnit=" + price;
+        if (category != null){
+            output += ", category='" + category.getCategoryName() + '\'';
+        }
+        return output;
     }
 }
