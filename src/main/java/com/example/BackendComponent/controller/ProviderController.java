@@ -3,6 +3,7 @@ package com.example.BackendComponent.controller;
 import com.example.BackendComponent.entity.Provider;
 import com.example.BackendComponent.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ProviderController {
     }
 
     @RequestMapping(path="/providers")
-    public List<Provider> getAllprovider(){return providerService.getAllprovider();}
+    public List<Provider> getAllprovider(){return providerService.getAllprovider(null);}
 
     @RequestMapping(path="/providers/{id}")
     public Provider getproviderByID(@PathVariable Long id){return providerService.getProviderByID(id);}
@@ -33,4 +34,9 @@ public class ProviderController {
 
     @DeleteMapping(path="/providers/{id}")
     public Provider deleteprovider(@PathVariable Long id){return providerService.deleteProvider(id);}
+
+    @RequestMapping(path="/providers/search")
+    public List<Provider> searchProvider(@Param("keyword") String keyword){
+        return providerService.getAllprovider(keyword);
+    }
 }

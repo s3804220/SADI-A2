@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.BackendComponent.service.CustomerService;
 import com.example.BackendComponent.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class CustomerController {
     }
 
     @RequestMapping(path="/customers")
-    public List<Customer> getAllCustomer(){return customerService.getAllCustomer();}
+    public List<Customer> getAllCustomer(){return customerService.getAllCustomer(null);}
 
     @RequestMapping(path="/customers/{id}")
     public Customer getCustomerByID(@PathVariable Long id){return customerService.getCustomerByID(id);}
@@ -33,4 +34,9 @@ public class CustomerController {
 
     @DeleteMapping(path="/customers/{id}")
     public Customer deleteCustomer(@PathVariable Long id){return customerService.deleteCustomer(id);}
+
+    @RequestMapping(path="/customers/search")
+    public List<Customer> searchCustomer(@Param("keyword") String keyword){
+        return customerService.getAllCustomer(keyword);
+    }
 }
