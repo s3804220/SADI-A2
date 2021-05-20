@@ -50,7 +50,7 @@ public class OrderService {
 
     public String getOrderDetails(Long orderID){
         Order order = getOrderByID(orderID);
-        return order.getOrderProduct().toString() + "\n" +order.getOrderStaff() + "\nOrder Quantity: " + order.getOrderQuantity() +
-                "\nOrder Total Price: $" + order.getOrderQuantity()*order.getOrderProduct().getPrice();
+        return "Product Info: {" +order.getOrderProduct() + "}" + "\n" + "Staff Info: {" + order.getOrderStaff() + "}" + "\nOrder Quantity: " + order.getOrderQuantity() +
+                "\nOrder Total Price: $ " + order.getOrderQuantity()*order.getOrderProduct().getPrice();
     }
 }

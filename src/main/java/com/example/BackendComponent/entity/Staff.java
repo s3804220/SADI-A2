@@ -91,11 +91,10 @@ public class Staff {
 
     @Override
     public String toString() {
-        return "Staff{" +
+        return
                 "staffName='" + staffName + '\'' +
                 ", staffAddress='" + staffAddress + '\'' +
                 ", staffPhone='" + staffPhone + '\'' +
-                ", staffEmail='" + staffEmail + '\'' +
-                '}';
+                ", staffEmail='" + staffEmail + '\'';
     }
 }
