@@ -96,10 +96,22 @@ public class Order {
         this.orderStaff = null;
     }
 
-//    public Float getOrderTotalPrice(){
-//        if (this.orderProduct == null){
-//            return null;
-//        }
-//        return this.orderProduct.getPrice() * this.orderQuantity;
-//    }
+    @Override
+    public String toString() {
+        String output = "Order{" +
+                "orderID=" + orderID +
+                ", orderDate=" + orderDate +
+                ", orderQuantity=" + orderQuantity;
+        if (orderProduct != null){
+            output += ", orderProduct=" + orderProduct;
+        }
+        if (orderProvider != null){
+            output += ", orderProvider=" + orderProvider;
+        }
+        if (orderStaff != null){
+            output += ", orderStaff=" + orderStaff;
+        }
+        output += '}';
+        return output;
+    }
 }

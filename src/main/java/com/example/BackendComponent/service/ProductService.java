@@ -24,7 +24,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts(String keyword){
+        if (keyword != null){
+            return productRepository.search(keyword);
+        }
         return StreamSupport
                 .stream(productRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

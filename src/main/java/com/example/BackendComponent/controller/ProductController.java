@@ -5,6 +5,8 @@ import java.util.List;
 import com.example.BackendComponent.entity.Category;
 import com.example.BackendComponent.service.UnifiedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.entity.Product;
@@ -24,7 +26,7 @@ public class ProductController {
 
     @GetMapping(path="/products")
     public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+        return productService.getAllProducts(null);
     }
 
     @GetMapping(path="/products/{id}")
@@ -55,5 +57,10 @@ public class ProductController {
     @DeleteMapping(path="/products/{productID}/category/{categoryID}")
     public Category deleteProductFromCategory(@PathVariable final Long productID, @PathVariable final Long categoryID){
         return unifiedService.removeProductFromCategory(categoryID, productID);
+    }
+
+    @RequestMapping(path="/products/search")
+    public List<Product> searchProduct(@Param("keyword") String keyword){
+        return productService.getAllProducts(keyword);
     }
 }

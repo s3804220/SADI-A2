@@ -27,7 +27,10 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public List<Customer> getAllCustomer(){
+    public List<Customer> getAllCustomer(String keyword){
+        if(keyword != null){
+            return customerRepository.search(keyword);
+        }
         return StreamSupport
                 .stream(customerRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

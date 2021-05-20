@@ -5,6 +5,8 @@ import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.entity.Provider;
 import com.example.BackendComponent.entity.Staff;
 import com.example.BackendComponent.service.UnifiedService;
+import org.springframework.data.repository.query.Param;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.service.OrderService;
@@ -75,5 +77,10 @@ public class OrderController {
     @DeleteMapping(path="/orders/{orderID}/provider/{providerID}")
     public Provider deleteProviderFromOrder(@PathVariable Long orderID, @PathVariable Long providerID){
         return unifiedService.removeProviderFromOrder(providerID, orderID);
+    }
+
+    @GetMapping(path="/orders/{orderID}/details")
+    public String getOrderDetails(@PathVariable Long orderID){
+        return orderService.getOrderDetails(orderID);
     }
 }
