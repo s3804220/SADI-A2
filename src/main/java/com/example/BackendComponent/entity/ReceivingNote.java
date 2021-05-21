@@ -1,18 +1,21 @@
 package com.example.BackendComponent.entity;
 
+import com.example.BackendComponent.repository.OrderRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 @Table(name = "receivingnote")
 public class ReceivingNote {
     @Id
     @Column
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long receivingNoteID;
 
     @Column
@@ -23,6 +26,11 @@ public class ReceivingNote {
     @JsonBackReference(value = "receive-staff")
     @JoinColumn(name="staffID")
     private Staff receiveStaff;
+
+    @OneToOne
+    @JsonBackReference(value = "receive-order")
+    @JoinColumn(name = "orderID")
+    private Order receiveOrder;
 
     @ManyToOne
     @JsonBackReference(value = "receive-product")
@@ -38,8 +46,6 @@ public class ReceivingNote {
         this.receivingNoteID = receivingNoteID;
         this.receiveDate = receiveDate;
         this.receiveStaff = receiveStaff;
-        this.receiveProduct = receiveOrder.getOrderProduct();
-        this.receiveQuantity = receiveOrder.getOrderQuantity();
     }
 
     public Long getReceivingNoteID() {
@@ -80,5 +86,22 @@ public class ReceivingNote {
 
     public void setReceiveQuantity(int receiveQuantity) {
         this.receiveQuantity = receiveQuantity;
+    }
+
+    public Order getReceiveOrder() {
+        return receiveOrder;
+    }
+
+    public void setReceiveOrder(Order receiveOrder) {
+        this.receiveOrder = receiveOrder;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setDataFromOrder(){
+        if(receiveOrder != null){
+            receiveProduct = receiveOrder.getOrderProduct();
+            receiveQuantity = receiveOrder.getOrderQuantity();
+        }
     }
 }

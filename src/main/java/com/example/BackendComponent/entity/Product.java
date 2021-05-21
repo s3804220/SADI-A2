@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -11,7 +12,6 @@ import java.util.Set;
 public class Product {
     @Id
     @Column
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productID;
 
     @Column
@@ -30,7 +30,7 @@ public class Product {
     private String description;
 
     @Column
-    private float price;
+    private BigDecimal price;
 
     @ManyToOne
     @JsonBackReference(value = "product-category")
@@ -53,7 +53,7 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleProduct")
     private Set<SaleInvoice> productInvoice;
 
-    public Product(Long productID, String productName, String model, String brand, String company, String description, float price, Category category){
+    public Product(Long productID, String productName, String model, String brand, String company, String description, BigDecimal price, Category category){
         super();
         this.productID = productID;
         this.productName = productName;
@@ -115,11 +115,11 @@ public class Product {
         this.description = description;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

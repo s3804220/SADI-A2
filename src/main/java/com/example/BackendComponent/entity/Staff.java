@@ -10,8 +10,7 @@ import java.util.Set;
 public class Staff {
     @Id
     @Column
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long staffID;
+    private Long staffID;
 
     @Column
     private String staffName;
@@ -51,11 +50,11 @@ public class Staff {
         this.staffEmail = email;
     }
 
-    public long getStaffID() {
+    public Long getStaffID() {
         return staffID;
     }
 
-    public void setStaffID(long staffID) {
+    public void setStaffID(Long staffID) {
         this.staffID = staffID;
     }
 

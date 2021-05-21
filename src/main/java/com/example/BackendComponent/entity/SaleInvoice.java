@@ -2,9 +2,9 @@ package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -37,10 +37,10 @@ public class SaleInvoice {
     private int saleQuantity;
 
     @Column
-    private float salePrice;
+    private BigDecimal salePrice;
 
     @Column
-    private float totalValue;
+    private BigDecimal totalValue;
 
     public SaleInvoice(){}
 
@@ -51,8 +51,6 @@ public class SaleInvoice {
         this.customer = customer;
         this.saleProduct = saleProduct;
         this.saleQuantity = saleQuantity;
-        this.salePrice = this.saleProduct.getPrice();
-        this.totalValue = this.salePrice*this.saleQuantity;
     }
 
     public Long getSaleID() {
@@ -103,19 +101,28 @@ public class SaleInvoice {
         this.saleQuantity = saleQuantity;
     }
 
-    public float getSalePrice() {
+    public BigDecimal getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(float salePrice) {
+    public void setSalePrice(BigDecimal salePrice) {
         this.salePrice = salePrice;
     }
 
-    public float getTotalValue() {
+    public BigDecimal getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(float totalValue) {
+    public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setValue(){
+        if(saleProduct != null){
+            salePrice = saleProduct.getPrice();
+            totalValue = salePrice.multiply(BigDecimal.valueOf(saleQuantity));
+        }
     }
 }

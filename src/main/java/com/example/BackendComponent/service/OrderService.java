@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Transactional
 @Service
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
-
-    //public OrderService(OrderRepository orderRepository) {this.orderRepository = orderRepository;}
 
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
@@ -60,10 +57,9 @@ public class OrderService {
         return orderToUpdate;
     }*/
 
-
     public String getOrderDetails(Long orderID){
         Order order = getOrderByID(orderID);
         return "Product Info: {" +order.getOrderProduct() + "}" + "\n" + "Staff Info: {" + order.getOrderStaff() + "}" + "\nOrder Quantity: " + order.getOrderQuantity() +
-                "\nOrder Total Price: $ " + order.getOrderQuantity()*order.getOrderProduct().getPrice();
+                "\nOrder Total Price: $ " + order.getOrderProduct().getPrice().multiply(BigDecimal.valueOf(order.getOrderQuantity()));
     }
 }

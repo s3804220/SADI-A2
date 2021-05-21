@@ -10,7 +10,6 @@ import java.util.Set;
 public class Provider {
     @Id
     @Column
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long providerID;
 
     @Column

@@ -2,9 +2,9 @@ package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -33,12 +33,12 @@ public class DeliveryNote {
 
     public DeliveryNote(){}
 
-    public DeliveryNote(Long deliveryNoteID, LocalDate deliveryDate, Staff deliveryStaff, Order deliveryOrder){
+    public DeliveryNote(Long deliveryNoteID, LocalDate deliveryDate, Staff deliveryStaff, Product deliveryProduct, int deliveryQuantity){
         this.deliveryNoteID = deliveryNoteID;
         this.deliveryDate = deliveryDate;
         this.deliveryStaff = deliveryStaff;
-        this.deliveryProduct = deliveryOrder.getOrderProduct();
-        this.deliveryQuantity = deliveryOrder.getOrderQuantity();
+        this.deliveryProduct = deliveryProduct;
+        this.deliveryQuantity = deliveryQuantity;
     }
 
     public Long getDeliveryNoteID() {

@@ -2,9 +2,10 @@ package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -12,7 +13,6 @@ import java.time.LocalDate;
 public class Order {
     @Id
     @Column
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderID;
 
     @Column
@@ -38,7 +38,11 @@ public class Order {
     private int orderQuantity;
 
     @Column
-    private float orderPrice;
+    private BigDecimal orderPrice;
+
+    @OneToOne(mappedBy = "receiveOrder")
+    @JsonManagedReference(value = "receive-order")
+    private ReceivingNote noteForOrder;
 
     public Order(){}
 
@@ -49,7 +53,6 @@ public class Order {
         this.orderProvider = orderProvider;
         this.orderProduct = orderProduct;
         this.orderQuantity = orderQuantity;
-        this.orderPrice = this.orderProduct.getPrice();
     }
 
     public Long getOrderID() {
@@ -104,12 +107,26 @@ public class Order {
         this.orderStaff = orderStaff;
     }
 
-    public float getOrderPrice() {
+    public BigDecimal getOrderPrice() {
         return orderPrice;
     }
 
-    public void setOrderPrice(float orderPrice) {
+    public void setOrderPrice(BigDecimal orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    public ReceivingNote getNoteForOrder() {
+        return noteForOrder;
+    }
+
+    public void setNoteForOrder(ReceivingNote noteForOrder) {
+        this.noteForOrder = noteForOrder;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setPrice(){
+        orderPrice = orderProduct.getPrice();
     }
 
     //public void deleteOrderStaff(){this.orderStaff = null;}
