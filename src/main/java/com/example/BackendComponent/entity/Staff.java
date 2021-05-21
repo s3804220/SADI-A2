@@ -1,5 +1,7 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -23,15 +25,19 @@ public class Staff {
     @Column
     private String staffEmail;
 
+    @JsonManagedReference(value = "order-staff")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderStaff")
     private Set<Order> staffOrders;
 
+    @JsonManagedReference(value = "receive-staff")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "receiveStaff")
     private Set<ReceivingNote> staffReceivingNotes;
 
+    @JsonManagedReference(value = "delivery-staff")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryStaff")
     private Set<DeliveryNote> staffDeliveryNotes;
 
+    @JsonManagedReference(value = "sale-staff")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleStaff")
     private Set<SaleInvoice> staffInvoice;
 

@@ -1,5 +1,7 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class Category {
     @Column
     private String categoryName;
 
+    @JsonManagedReference(value = "product-category")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
     private Set<Product> products;
 

@@ -1,6 +1,7 @@
 package com.example.BackendComponent.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,19 +33,23 @@ public class Product {
     private float price;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "product-category")
     @JoinColumn(name="categoryID")
     private Category category;
 
+    @JsonManagedReference(value = "order-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderProduct")
     private Set<Order> productOrders;
 
+    @JsonManagedReference(value = "receive-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "receiveProduct")
     private Set<ReceivingNote> productReceivingNotes;
 
+    @JsonManagedReference(value = "delivery-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryProduct")
     private Set<DeliveryNote> productDeliveryNotes;
 
+    @JsonManagedReference(value = "sale-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleProduct")
     private Set<SaleInvoice> productInvoice;
 

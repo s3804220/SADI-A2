@@ -1,5 +1,7 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -29,6 +31,7 @@ public class Customer {
     @Column
     private String customerContactPerson;
 
+    @JsonManagedReference(value = "sale-customer")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
     private Set<SaleInvoice> customerInvoice;
 

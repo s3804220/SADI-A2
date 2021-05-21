@@ -1,5 +1,6 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,17 +20,17 @@ public class Order {
     private LocalDate orderDate;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "order-staff")
     @JoinColumn(name="staffID")
     private Staff orderStaff;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "order-provider")
     @JoinColumn(name="providerID")
     private Provider orderProvider;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "order-product")
     @JoinColumn(name="productID")
     private Product orderProduct;
 
