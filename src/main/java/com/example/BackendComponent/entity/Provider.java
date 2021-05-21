@@ -1,5 +1,4 @@
 package com.example.BackendComponent.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -9,7 +8,7 @@ import java.util.Set;
 public class Provider {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long providerID;
 
     @Column
@@ -25,72 +24,64 @@ public class Provider {
     private String providerFax;
 
     @Column
-    private String providerContactPerson;
-
-    @Column
     private String providerEmail;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @Column
+    private String providerContactPerson;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderProvider")
     private Set<Order> providerOrders;
 
     public Provider(){};
 
-    public Provider(String providerName, String providerAddress, String providerPhone, String providerFax, String providerContactPerson, String providerEmail) {
+    public Provider(Long providerID, String providerName, String providerAddress, String providerPhone, String providerFax, String providerEmail, String providerContactPerson) {
+        this.providerID = providerID;
         this.providerName = providerName;
         this.providerAddress = providerAddress;
         this.providerPhone = providerPhone;
         this.providerFax = providerFax;
-        this.providerContactPerson = providerContactPerson;
         this.providerEmail = providerEmail;
+        this.providerContactPerson = providerContactPerson;
     }
 
-    public Long getproviderID() {
+    public Long getProviderID() {
         return providerID;
     }
 
-    public void setproviderID(Long providerID) {
+    public void setProviderID(Long providerID) {
         this.providerID = providerID;
     }
 
-    public String getproviderName() {
+    public String getProviderName() {
         return providerName;
     }
 
-    public void setproviderName(String providerName) {
+    public void setProviderName(String providerName) {
         this.providerName = providerName;
     }
 
-    public String getproviderAddress() {
+    public String getProviderAddress() {
         return providerAddress;
     }
 
-    public void setproviderAddress(String providerAddress) {
+    public void setProviderAddress(String providerAddress) {
         this.providerAddress = providerAddress;
     }
 
-    public String getproviderPhone() {
+    public String getProviderPhone() {
         return providerPhone;
     }
 
-    public void setproviderPhone(String providerPhone) {
+    public void setProviderPhone(String providerPhone) {
         this.providerPhone = providerPhone;
     }
 
-    public String getproviderFax() {
+    public String getProviderFax() {
         return providerFax;
     }
 
-    public void setproviderFax(String providerFax) {
+    public void setProviderFax(String providerFax) {
         this.providerFax = providerFax;
-    }
-
-    public String getproviderContactPerson() {
-        return providerContactPerson;
-    }
-
-    public void setproviderContactPerson(String providerContactPerson) {
-        this.providerContactPerson = providerContactPerson;
     }
 
     public String getProviderEmail() {
@@ -101,15 +92,19 @@ public class Provider {
         this.providerEmail = providerEmail;
     }
 
+    public String getProviderContactPerson() {
+        return providerContactPerson;
+    }
+
+    public void setProviderContactPerson(String providerContactPerson) {
+        this.providerContactPerson = providerContactPerson;
+    }
+
     public Set<Order> getProviderOrders() {
-        return this.providerOrders;
+        return providerOrders;
     }
 
     public void setProviderOrders(Set<Order> providerOrders) {
         this.providerOrders = providerOrders;
     }
-
-    public void addProviderOrder(Order order){this.providerOrders.add(order);}
-
-    public void deleteProviderOrder(Order order){this.providerOrders.remove(order);}
 }

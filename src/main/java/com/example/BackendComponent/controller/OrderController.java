@@ -4,7 +4,8 @@ import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.entity.Provider;
 import com.example.BackendComponent.entity.Staff;
-import com.example.BackendComponent.service.UnifiedService;
+//import com.example.BackendComponent.service.UnifiedService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.service.OrderService;
@@ -14,13 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class OrderController {
-    private final OrderService orderService;
-    private final UnifiedService unifiedService;
 
-    public OrderController(OrderService orderService, UnifiedService unifiedService) {
+    @Autowired
+    private OrderService orderService;
+    //private final UnifiedService unifiedService;
+
+    /*public OrderController(OrderService orderService, UnifiedService unifiedService) {
         this.orderService = orderService;
         this.unifiedService = unifiedService;
-    }
+    }*/
 
     @GetMapping(path="/orders")
     public List<Order> getAllOrder(){
@@ -42,12 +45,12 @@ public class OrderController {
         return orderService.deleteOrder(id);
     }
 
-    @PutMapping(path="/orders/{id}")
-    public Order updateOrder(@PathVariable Long id, @RequestBody Order order){
-        return orderService.updateOrder(id, order);
+    @PutMapping(path="/orders")
+    public Order updateOrder(@RequestBody Order order){
+        return orderService.updateOrder(order);
     }
 
-    @PostMapping(path="/orders/{orderID}/product/{productID}")
+    /*@PostMapping(path="/orders/{orderID}/product/{productID}")
     public Product addProductToOrder(@PathVariable Long orderID, @PathVariable Long productID){
         return unifiedService.addProductToOrder(productID, orderID);
     }
@@ -75,7 +78,7 @@ public class OrderController {
     @DeleteMapping(path="/orders/{orderID}/provider/{providerID}")
     public Provider deleteProviderFromOrder(@PathVariable Long orderID, @PathVariable Long providerID){
         return unifiedService.removeProviderFromOrder(providerID, orderID);
-    }
+    }*/
 
     @GetMapping(path="/orders/{orderID}/details")
     public String getOrderDetails(@PathVariable Long orderID){

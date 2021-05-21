@@ -1,7 +1,7 @@
 package com.example.BackendComponent.service;
 
-import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.entity.Provider;
+import com.example.BackendComponent.exception.ProviderAlreadyExistException;
 import com.example.BackendComponent.exception.ProviderNotFoundException;
 import com.example.BackendComponent.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,29 +9,43 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Transactional
 @Service
 public class ProviderService {
-    private final ProviderRepository providerRepository;
-    private final OrderService orderService;
-
     @Autowired
+    private ProviderRepository providerRepository;
+    //private final OrderService orderService;
+
+    /*@Autowired
     public ProviderService(ProviderRepository providerRepository, OrderService orderService) {
         this.providerRepository = providerRepository;
         this.orderService = orderService;
-    }
+    }*/
 
     public Provider addProvider(Provider provider){
-        return providerRepository.save(provider);
+        if(!providerRepository.existsById(provider.getProviderID())){
+            providerRepository.save(provider);
+        }else {
+            throw new ProviderAlreadyExistException(provider.getProviderID());
+        }
+        return provider;
     }
 
-    public List<Provider> getAllprovider(){
-        return StreamSupport
-                .stream(providerRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public Provider updateProvider(Provider provider){
+        if(providerRepository.existsById(provider.getProviderID())){
+            providerRepository.save(provider);
+        }else{
+            throw new ProviderNotFoundException(provider.getProviderID());
+        }
+        return provider;
+    }
+
+    public List<Provider> getAllProvider(String keyword){
+        if (keyword != null){
+            return providerRepository.search(keyword);
+        }
+        return providerRepository.findAll();
     }
 
     public Provider getProviderByID(Long id){
@@ -45,7 +59,7 @@ public class ProviderService {
         return providerToDelete;
     }
 
-    public Provider updateProvider(Long id, Provider newProvider){
+    /*public Provider updateProvider(Long id, Provider newProvider){
         Provider providerToUpdate = getProviderByID(id);
         providerToUpdate.setproviderName(newProvider.getproviderName());
         providerToUpdate.setproviderAddress(newProvider.getproviderAddress());
@@ -54,5 +68,5 @@ public class ProviderService {
         providerToUpdate.setproviderContactPerson(newProvider.getproviderContactPerson());
         providerToUpdate.setProviderEmail(newProvider.getProviderEmail());
         return providerToUpdate;
-    }
+    }*/
 }

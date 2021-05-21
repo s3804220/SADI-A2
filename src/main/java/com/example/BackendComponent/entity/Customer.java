@@ -1,12 +1,14 @@
 package com.example.BackendComponent.entity;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="customer")
 public class Customer {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerID;
 
     @Column
@@ -22,20 +24,24 @@ public class Customer {
     private String customerFax;
 
     @Column
-    private String customerContactPerson;
+    private String customerEmail;
 
     @Column
-    private String customerEmail;
+    private String customerContactPerson;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
+    private Set<SaleInvoice> customerInvoice;
 
     public Customer(){};
 
-    public Customer(String customerName, String customerAddress, String customerPhone, String customerFax, String customerContactPerson, String customerEmail) {
+    public Customer(Long customerID, String customerName, String customerAddress, String customerPhone, String customerFax, String customerEmail, String customerContactPerson) {
+        this.customerID = customerID;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.customerPhone = customerPhone;
         this.customerFax = customerFax;
-        this.customerContactPerson = customerContactPerson;
         this.customerEmail = customerEmail;
+        this.customerContactPerson = customerContactPerson;
     }
 
     public Long getCustomerID() {
@@ -78,6 +84,14 @@ public class Customer {
         this.customerFax = customerFax;
     }
 
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
     public String getCustomerContactPerson() {
         return customerContactPerson;
     }
@@ -86,11 +100,11 @@ public class Customer {
         this.customerContactPerson = customerContactPerson;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public Set<SaleInvoice> getCustomerInvoice() {
+        return customerInvoice;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerInvoice(Set<SaleInvoice> customerInvoice) {
+        this.customerInvoice = customerInvoice;
     }
 }

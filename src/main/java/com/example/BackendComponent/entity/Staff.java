@@ -1,5 +1,4 @@
 package com.example.BackendComponent.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -9,7 +8,7 @@ import java.util.Set;
 public class Staff {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long staffID;
 
     @Column
@@ -24,13 +23,22 @@ public class Staff {
     @Column
     private String staffEmail;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderStaff")
     private Set<Order> staffOrders;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receiveStaff")
+    private Set<ReceivingNote> staffReceivingNotes;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryStaff")
+    private Set<DeliveryNote> staffDeliveryNotes;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleStaff")
+    private Set<SaleInvoice> staffInvoice;
 
     public Staff(){};
 
-    public Staff(String staffName, String staffAddress, String phone, String email) {
+    public Staff(Long staffID, String staffName, String staffAddress, String phone, String email) {
+        this.staffID = staffID;
         this.staffName = staffName;
         this.staffAddress = staffAddress;
         this.staffPhone = phone;
@@ -85,17 +93,39 @@ public class Staff {
         this.staffOrders = staffOrders;
     }
 
-    public void addStaffOrders(Order order){this.staffOrders.add(order);}
+    public Set<ReceivingNote> getStaffReceivingNotes() {
+        return staffReceivingNotes;
+    }
 
-    public void deleteStaffOrders(Order order){this.staffOrders.remove(order);}
+    public void setStaffReceivingNotes(Set<ReceivingNote> staffReceivingNotes) {
+        this.staffReceivingNotes = staffReceivingNotes;
+    }
+
+    public Set<DeliveryNote> getStaffDeliveryNotes() {
+        return staffDeliveryNotes;
+    }
+
+    public void setStaffDeliveryNotes(Set<DeliveryNote> staffDeliveryNotes) {
+        this.staffDeliveryNotes = staffDeliveryNotes;
+    }
+
+    public Set<SaleInvoice> getStaffInvoice() {
+        return staffInvoice;
+    }
+
+    public void setStaffInvoice(Set<SaleInvoice> staffInvoice) {
+        this.staffInvoice = staffInvoice;
+    }
+
+    /*public void addStaffOrders(Order order){this.staffOrders.add(order);}
+
+    public void deleteStaffOrders(Order order){this.staffOrders.remove(order);}*/
 
     @Override
     public String toString() {
-        return "Staff{" +
+        return
                 "staffName='" + staffName + '\'' +
                 ", staffAddress='" + staffAddress + '\'' +
-                ", staffPhone='" + staffPhone + '\'' +
-                ", staffEmail='" + staffEmail + '\'' +
-                '}';
+                ", staffPhone='" + staffPhone + '\'' + ", staffEmail='" + staffEmail + '\'';
     }
 }

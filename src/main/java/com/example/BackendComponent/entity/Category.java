@@ -1,13 +1,6 @@
 package com.example.BackendComponent.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 
@@ -16,27 +9,24 @@ import java.util.Set;
 public class Category {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryID;
 
     @Column
     private String categoryName;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
     private Set<Product> products;
 
     public Category(){}
 
-    public Category(String categoryName){
+    public Category(Long categoryID, String categoryName){
         super();
+        this.categoryID = categoryID;
         this.categoryName = categoryName;
     }
-    public void addProduct(Product product){
-        products.add(product);
-    }
-    public void removeProduct(Product product){
-        products.remove(product);
-    }
+    //public void addProduct(Product product){products.add(product);}
+    //public void removeProduct(Product product){products.remove(product);}
     public Long getCategoryID() {
         return categoryID;
     }
@@ -51,5 +41,13 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

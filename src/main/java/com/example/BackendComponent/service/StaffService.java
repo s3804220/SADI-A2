@@ -1,5 +1,6 @@
 package com.example.BackendComponent.service;
 
+import com.example.BackendComponent.exception.StaffAlreadyExistException;
 import com.example.BackendComponent.exception.StaffNotFoundException;
 import com.example.BackendComponent.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +14,37 @@ import com.example.BackendComponent.entity.Staff;
 @Transactional
 @Service
 public class StaffService {
-    private final StaffRepository staffRepository;
-
     @Autowired
+    private StaffRepository staffRepository;
+
+    /*@Autowired
     public StaffService(StaffRepository staffRepository, OrderService orderService) {
         this.staffRepository = staffRepository;
-    }
+    }*/
 
     public Staff addStaff(Staff staff){
-        return staffRepository.save(staff);
+        if(!staffRepository.existsById(staff.getStaffID())){
+            staffRepository.save(staff);
+        }else {
+            throw new StaffAlreadyExistException(staff.getStaffID());
+        }
+        return staff;
     }
 
-    public List<Staff> getAllStaffs(){
-        return StreamSupport
-                .stream(staffRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public Staff updateStaff(Staff staff){
+        if(staffRepository.existsById(staff.getStaffID())){
+            staffRepository.save(staff);
+        } else {
+            throw new StaffNotFoundException(staff.getStaffID());
+        }
+        return staff;
+    }
+
+    public List<Staff> getAllStaffs(String keyword){
+        if (keyword != null){
+            return staffRepository.search(keyword);
+        }
+        return staffRepository.findAll();
     }
 
     public Staff getStaffByID(Long id){
@@ -41,7 +58,7 @@ public class StaffService {
         return staff;
     }
 
-    public Staff updateStaff(Long id, Staff newStaff){
+    /*public Staff updateStaff(Long id, Staff newStaff){
         Staff staffToEdit = getStaffByID(id);
         staffToEdit.setStaffName(newStaff.getStaffName());
         staffToEdit.setStaffPhone(newStaff.getStaffPhone());
@@ -49,5 +66,5 @@ public class StaffService {
         staffToEdit.setStaffEmail(newStaff.getStaffEmail());
         staffToEdit.setStaffAddress(newStaff.getStaffAddress());
         return staffToEdit;
-    }
+    }*/
 }

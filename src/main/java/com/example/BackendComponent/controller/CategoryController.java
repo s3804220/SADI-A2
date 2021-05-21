@@ -3,6 +3,7 @@ package com.example.BackendComponent.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.entity.Category;
@@ -12,21 +13,22 @@ import com.example.BackendComponent.repository.CategoryRepository;
 @RestController
 @RequestMapping(path="/api")
 public class CategoryController {
-    private final CategoryService categoryService;
-
     @Autowired
+    private CategoryService categoryService;
+
+    /*@Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-    }
+    }*/
 
     @PostMapping(path="/categories")
-    public Category addCategory(@RequestBody final Category category){
+    public Category addCategory(@RequestBody Category category){
         return categoryService.addCategory(category);
     }
 
     @GetMapping(path="/categories")
     public List<Category> getAllCategories(){
-        return categoryService.getAllCategories();
+        return categoryService.getAllCategories(null);
     }
 
     @GetMapping(path="/categories/{id}")
@@ -39,8 +41,13 @@ public class CategoryController {
         return categoryService.deleteCategory(id);
     }
 
-    @PutMapping(path="/categories/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
-        return categoryService.updateCategory(id, category);
+    @PutMapping(path="/categories")
+    public Category updateCategory(@RequestBody Category category){
+        return categoryService.updateCategory(category);
+    }
+
+    @RequestMapping(path="/categories/search")
+    public List<Category> searchCategory(@Param("keyword") String keyword){
+        return categoryService.getAllCategories(keyword);
     }
 }

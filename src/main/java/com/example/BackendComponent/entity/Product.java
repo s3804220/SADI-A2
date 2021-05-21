@@ -10,7 +10,7 @@ import java.util.Set;
 public class Product {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productID;
 
     @Column
@@ -33,20 +33,31 @@ public class Product {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name="categoryID")
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderProduct")
     private Set<Order> productOrders;
 
-    public Product(String productName, String model, String brand, String company, String description, float price){
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receiveProduct")
+    private Set<ReceivingNote> productReceivingNotes;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryProduct")
+    private Set<DeliveryNote> productDeliveryNotes;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleProduct")
+    private Set<SaleInvoice> productInvoice;
+
+    public Product(Long productID, String productName, String model, String brand, String company, String description, float price, Category category){
         super();
+        this.productID = productID;
         this.productName = productName;
         this.model = model;
         this.brand = brand;
         this.company = company;
         this.description = description;
         this.price = price;
+        this.category = category;
     }
 
     public Product(){}
@@ -115,7 +126,7 @@ public class Product {
         this.category = category;
     }
 
-    public void deleteCategory(){ this.category = null;}
+    //public void deleteCategory(){ this.category = null;}
 
     public Set<Order> getProductOrders() {
         return productOrders;
@@ -124,23 +135,45 @@ public class Product {
     public void setProductOrders(Set<Order> productOrders) {
         this.productOrders = productOrders;
     }
-    public void addProductOrder(Order order){
-        this.productOrders.add(order);
+
+    public Set<ReceivingNote> getProductReceivingNotes() {
+        return productReceivingNotes;
     }
-    public void deleteProductOrder(Order order){
-       this.productOrders.remove(order);
+
+    public void setProductReceivingNotes(Set<ReceivingNote> productReceivingNotes) {
+        this.productReceivingNotes = productReceivingNotes;
     }
+
+    public Set<DeliveryNote> getProductDeliveryNotes() {
+        return productDeliveryNotes;
+    }
+
+    public void setProductDeliveryNotes(Set<DeliveryNote> productDeliveryNotes) {
+        this.productDeliveryNotes = productDeliveryNotes;
+    }
+
+    public Set<SaleInvoice> getProductInvoice() {
+        return productInvoice;
+    }
+
+    public void setProductInvoice(Set<SaleInvoice> productInvoice) {
+        this.productInvoice = productInvoice;
+    }
+
+    //public void addProductOrder(Order order){this.productOrders.add(order);}
+    //public void deleteProductOrder(Order order){this.productOrders.remove(order);}
 
     @Override
     public String toString() {
-        return "Product{" +
+        String output=
                 "productName='" + productName + '\'' +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
                 ", company='" + company + '\'' +
-                ", description='" + description + '\'' +
-                ", pricePerUnit=" + price +
-                ", category=" + category.getCategoryName() +
-                '}';
+                ", description='" + description + '\'' + ", pricePerUnit=" + price;
+        if (category != null){
+            output += ", category='" + category.getCategoryName() + '\'';
+        }
+        return output;
     }
 }

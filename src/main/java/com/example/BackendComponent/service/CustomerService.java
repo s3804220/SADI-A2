@@ -1,5 +1,6 @@
 package com.example.BackendComponent.service;
 
+import com.example.BackendComponent.exception.CustomerAlreadyExistException;
 import com.example.BackendComponent.exception.CustomerNotFoundException;
 import com.example.BackendComponent.repository.CustomerRepository;
 
@@ -16,21 +17,37 @@ import com.example.BackendComponent.entity.*;
 @Transactional
 @Service
 public class CustomerService {
-    private final CustomerRepository customerRepository;
-
     @Autowired
+    private CustomerRepository customerRepository;
+
+    /*@Autowired
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-    }
+    }*/
 
     public Customer addCustomer(Customer customer){
-        return customerRepository.save(customer);
+        if(!customerRepository.existsById(customer.getCustomerID())){
+            customerRepository.save(customer);
+        }else {
+            throw new CustomerAlreadyExistException(customer.getCustomerID());
+        }
+        return customer;
     }
 
-    public List<Customer> getAllCustomer(){
-        return StreamSupport
-                .stream(customerRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public Customer updateCustomer(Customer customer){
+        if(customerRepository.existsById(customer.getCustomerID())){
+            customerRepository.save(customer);
+        } else{
+            throw new CustomerNotFoundException(customer.getCustomerID());
+        }
+        return customer;
+    }
+
+    public List<Customer> getAllCustomer(String keyword){
+        if(keyword != null){
+            return customerRepository.search(keyword);
+        }
+        return customerRepository.findAll();
     }
 
     public Customer getCustomerByID(Long id){
@@ -44,7 +61,7 @@ public class CustomerService {
         return customerToDelete;
     }
 
-    public Customer updateCustomer(Long id, Customer newCustomer){
+    /*public Customer updateCustomer(Long id, Customer newCustomer){
         Customer customerToUpdate = getCustomerByID(id);
         customerToUpdate.setCustomerName(newCustomer.getCustomerName());
         customerToUpdate.setCustomerAddress(newCustomer.getCustomerAddress());
@@ -53,5 +70,5 @@ public class CustomerService {
         customerToUpdate.setCustomerContactPerson(newCustomer.getCustomerContactPerson());
         customerToUpdate.setCustomerEmail(newCustomer.getCustomerEmail());
         return customerToUpdate;
-    }
+    }*/
 }

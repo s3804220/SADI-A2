@@ -1,4 +1,5 @@
 package com.example.BackendComponent.entity;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -6,45 +7,55 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "company_order")
+@Table(name = "orders")
 public class Order {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderID;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderID;
 
     @Column
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate orderDate;
 
-    @Column
-    private int orderQuantity;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name="staffID")
+    private Staff orderStaff;
 
     @ManyToOne
     @JsonIgnore
-    private Product orderProduct;
-
-    @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name="providerID")
     private Provider orderProvider;
 
     @ManyToOne
     @JsonIgnore
-    private Staff orderStaff;
+    @JoinColumn(name="productID")
+    private Product orderProduct;
+
+    @Column
+    private int orderQuantity;
+
+    @Column
+    private float orderPrice;
 
     public Order(){}
 
-    public Order(long orderID, LocalDate orderDate, int orderQuantity) {
+    public Order(Long orderID, LocalDate orderDate, Staff orderStaff, Provider orderProvider, Product orderProduct, int orderQuantity) {
         this.orderID = orderID;
         this.orderDate = orderDate;
+        this.orderStaff = orderStaff;
+        this.orderProvider = orderProvider;
+        this.orderProduct = orderProduct;
         this.orderQuantity = orderQuantity;
+        this.orderPrice = this.orderProduct.getPrice();
     }
 
-    public long getOrderID() {
+    public Long getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(long orderID) {
+    public void setOrderID(Long orderID) {
         this.orderID = orderID;
     }
 
@@ -72,7 +83,7 @@ public class Order {
         this.orderProduct = orderProduct;
     }
 
-    public void deleteOrderProduct(){this.orderProduct = null;}
+    //public void deleteOrderProduct(){this.orderProduct = null;}
 
     public Provider getOrderProvider() {
         return orderProvider;
@@ -82,7 +93,7 @@ public class Order {
         this.orderProvider = orderProvider;
     }
 
-    public void deleteOrderProvider(){this.orderProvider = null;}
+    //public void deleteOrderProvider(){this.orderProvider = null;}
 
     public Staff getOrderStaff() {
         return orderStaff;
@@ -92,7 +103,32 @@ public class Order {
         this.orderStaff = orderStaff;
     }
 
-    public void deleteOrderStaff(){
-        this.orderStaff = null;
+    public float getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(float orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    //public void deleteOrderStaff(){this.orderStaff = null;}
+
+    @Override
+    public String toString() {
+        String output = "Order{" +
+                "orderID=" + orderID +
+                ", orderDate=" + orderDate +
+                ", orderQuantity=" + orderQuantity;
+        if (orderProduct != null){
+            output += ", orderProduct=" + orderProduct;
+        }
+        if (orderProvider != null){
+            output += ", orderProvider=" + orderProvider;
+        }
+        if (orderStaff != null){
+            output += ", orderStaff=" + orderStaff;
+        }
+        output += '}';
+        return output;
     }
 }
