@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -56,6 +60,25 @@ public class OrderService {
         orderToUpdate.setOrderQuantity(newOrder.getOrderQuantity());
         return orderToUpdate;
     }*/
+
+    public List<Order> searchOrderBy(LocalDate startdate, LocalDate enddate){
+        Date fromdate = null,todate = null;
+        if(startdate != null){
+            try {
+                fromdate = new SimpleDateFormat("yyyy-MM-dd").parse(startdate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(enddate != null){
+            try {
+                todate = new SimpleDateFormat("yyyy-MM-dd").parse(enddate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return orderRepository.searchOrderBy(fromdate, todate);
+    }
 
     public String getOrderDetails(Long orderID){
         Order order = getOrderByID(orderID);

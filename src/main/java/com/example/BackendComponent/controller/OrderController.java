@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.BackendComponent.service.OrderService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -50,6 +52,19 @@ public class OrderController {
         return orderService.updateOrder(order);
     }
 
+    @GetMapping(path="/orders/search")
+    public List<Order> searchOrderBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
+        LocalDate fromdate, todate;
+        fromdate = start.map(LocalDate::parse).orElse(null);
+        todate = end.map(LocalDate::parse).orElse(null);
+        return orderService.searchOrderBy(fromdate, todate);
+    }
+
+    @GetMapping(path="/orders/{orderID}/details")
+    public String getOrderDetails(@PathVariable Long orderID){
+        return orderService.getOrderDetails(orderID);
+    }
+
     /*@PostMapping(path="/orders/{orderID}/product/{productID}")
     public Product addProductToOrder(@PathVariable Long orderID, @PathVariable Long productID){
         return unifiedService.addProductToOrder(productID, orderID);
@@ -79,9 +94,4 @@ public class OrderController {
     public Provider deleteProviderFromOrder(@PathVariable Long orderID, @PathVariable Long providerID){
         return unifiedService.removeProviderFromOrder(providerID, orderID);
     }*/
-
-    @GetMapping(path="/orders/{orderID}/details")
-    public String getOrderDetails(@PathVariable Long orderID){
-        return orderService.getOrderDetails(orderID);
-    }
 }

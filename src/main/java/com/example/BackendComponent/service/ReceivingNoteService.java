@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -49,5 +53,24 @@ public class ReceivingNoteService {
         ReceivingNote receivingNoteToDelete = getReceivingNoteByID(id);
         receivingNoteRepository.delete(receivingNoteToDelete);
         return receivingNoteToDelete;
+    }
+
+    public List<ReceivingNote> searchReceivingNoteBy(LocalDate startdate, LocalDate enddate){
+        Date fromdate = null,todate = null;
+        if(startdate != null){
+            try {
+                fromdate = new SimpleDateFormat("yyyy-MM-dd").parse(startdate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(enddate != null){
+            try {
+                todate = new SimpleDateFormat("yyyy-MM-dd").parse(enddate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return receivingNoteRepository.searchReceivingNoteBy(fromdate, todate);
     }
 }

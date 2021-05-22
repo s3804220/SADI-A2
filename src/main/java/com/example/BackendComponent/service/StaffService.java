@@ -4,6 +4,7 @@ import com.example.BackendComponent.exception.StaffAlreadyExistException;
 import com.example.BackendComponent.exception.StaffNotFoundException;
 import com.example.BackendComponent.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -40,10 +41,7 @@ public class StaffService {
         return staff;
     }
 
-    public List<Staff> getAllStaffs(String keyword){
-        if (keyword != null){
-            return staffRepository.search(keyword);
-        }
+    public List<Staff> getAllStaffs(){
         return staffRepository.findAll();
     }
 
@@ -56,6 +54,10 @@ public class StaffService {
         Staff staff = getStaffByID(id);
         staffRepository.delete(staff);
         return staff;
+    }
+
+    public List<Staff> searchStaffBy(String name, String address, String phone, String email){
+        return staffRepository.searchStaffBy(name,address,phone,email);
     }
 
     /*public Staff updateStaff(Long id, Staff newStaff){

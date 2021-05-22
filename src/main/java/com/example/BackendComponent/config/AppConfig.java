@@ -51,7 +51,8 @@ public class AppConfig {
 
         Properties properties = new Properties();
         //For Postgresql
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        //properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL82Dialect");
         //For mysql
         //properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.put("hibernate.show_sql", true);

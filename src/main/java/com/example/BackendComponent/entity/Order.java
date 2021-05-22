@@ -15,7 +15,7 @@ public class Order {
     @Column
     private Long orderID;
 
-    @Column
+    @Column(columnDefinition = "DATE")
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate orderDate;
 
@@ -126,7 +126,9 @@ public class Order {
     @PrePersist
     @PreUpdate
     public void setPrice(){
-        orderPrice = orderProduct.getPrice();
+        if(orderProduct!= null){
+            orderPrice = orderProduct.getPrice();
+        }
     }
 
     //public void deleteOrderStaff(){this.orderStaff = null;}
