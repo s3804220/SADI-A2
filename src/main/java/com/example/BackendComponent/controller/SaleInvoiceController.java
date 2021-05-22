@@ -16,32 +16,32 @@ public class SaleInvoiceController {
     @Autowired
     private SaleInvoiceService saleInvoiceService;
 
-    @GetMapping(path="/sale")
+    @GetMapping(path="/sales")
     public List<SaleInvoice> getAllSaleInvoices(){
         return saleInvoiceService.getAllSaleInvoice();
     }
 
-    @GetMapping(path="/sale/{id}")
+    @GetMapping(path="/sales/{id}")
     public SaleInvoice getSaleInvoiceById(@PathVariable Long id){
         return saleInvoiceService.getSaleInvoiceById(id);
     }
 
-    @PostMapping(path="/sale")
+    @PostMapping(path="/sales")
     public SaleInvoice addSaleInvoice(@RequestBody SaleInvoice saleInvoice){
         return saleInvoiceService.addSaleInvoice(saleInvoice);
     }
 
-    @DeleteMapping(path="/sale/{id}")
+    @DeleteMapping(path="/sales/{id}")
     public SaleInvoice deleteSaleInvoice(@PathVariable Long id){
         return saleInvoiceService.deleteSaleInvoice(id);
     }
 
-    @PutMapping(path="/sale")
+    @PutMapping(path="/sales")
     public SaleInvoice updateSaleInvoice(@RequestBody SaleInvoice saleInvoice){
         return saleInvoiceService.updateSaleInvoice(saleInvoice);
     }
 
-    @GetMapping(path="/sale/search")
+    @GetMapping(path="/sales/search")
     public List<SaleInvoice> searchSaleBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);

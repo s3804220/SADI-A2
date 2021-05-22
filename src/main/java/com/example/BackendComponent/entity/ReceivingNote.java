@@ -1,15 +1,13 @@
 package com.example.BackendComponent.entity;
 
 import com.example.BackendComponent.repository.OrderRepository;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "receivingnote")
@@ -32,13 +30,9 @@ public class ReceivingNote {
     @JoinColumn(name = "orderID")
     private Order receiveOrder;
 
-    @ManyToOne
-    @JsonBackReference(value = "receive-product")
-    @JoinColumn(name="productID")
-    private Product receiveProduct;
-
-    @Column
-    private int receiveQuantity;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receivingNote",cascade = CascadeType.REMOVE)
+    @JsonManagedReference(value = "receive-detail")
+    private Set<ReceivingDetail> receivingDetails;
 
     public ReceivingNote(){}
 
@@ -72,22 +66,6 @@ public class ReceivingNote {
         this.receiveStaff = receiveStaff;
     }
 
-    public Product getReceiveProduct() {
-        return receiveProduct;
-    }
-
-    public void setReceiveProduct(Product receiveProduct) {
-        this.receiveProduct = receiveProduct;
-    }
-
-    public int getReceiveQuantity() {
-        return receiveQuantity;
-    }
-
-    public void setReceiveQuantity(int receiveQuantity) {
-        this.receiveQuantity = receiveQuantity;
-    }
-
     public Order getReceiveOrder() {
         return receiveOrder;
     }
@@ -96,12 +74,20 @@ public class ReceivingNote {
         this.receiveOrder = receiveOrder;
     }
 
-    @PrePersist
+    public Set<ReceivingDetail> getReceivingDetails() {
+        return receivingDetails;
+    }
+
+    public void setReceivingDetails(Set<ReceivingDetail> receivingDetails) {
+        this.receivingDetails = receivingDetails;
+    }
+
+    /*@PrePersist
     @PreUpdate
     public void setDataFromOrder(){
         if(receiveOrder != null){
             receiveProduct = receiveOrder.getOrderProduct();
             receiveQuantity = receiveOrder.getOrderQuantity();
         }
-    }
+    }*/
 }

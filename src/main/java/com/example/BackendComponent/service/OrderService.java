@@ -80,9 +80,9 @@ public class OrderService {
         return orderRepository.searchOrderBy(fromdate, todate);
     }
 
-    public String getOrderDetails(Long orderID){
+    /*public String getOrderDetails(Long orderID){
         Order order = getOrderByID(orderID);
         return "Product Info: {" +order.getOrderProduct() + "}" + "\n" + "Staff Info: {" + order.getOrderStaff() + "}" + "\nOrder Quantity: " + order.getOrderQuantity() +
                 "\nOrder Total Price: $ " + order.getOrderProduct().getPrice().multiply(BigDecimal.valueOf(order.getOrderQuantity()));
-    }
+    }*/
 }

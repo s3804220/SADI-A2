@@ -20,7 +20,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    //private final UnifiedService unifiedService;
 
     /*public OrderController(OrderService orderService, UnifiedService unifiedService) {
         this.orderService = orderService;
@@ -60,10 +59,10 @@ public class OrderController {
         return orderService.searchOrderBy(fromdate, todate);
     }
 
-    @GetMapping(path="/orders/{orderID}/details")
+    /*@GetMapping(path="/orders/{orderID}/details")
     public String getOrderDetails(@PathVariable Long orderID){
         return orderService.getOrderDetails(orderID);
-    }
+    }*/
 
     /*@PostMapping(path="/orders/{orderID}/product/{productID}")
     public Product addProductToOrder(@PathVariable Long orderID, @PathVariable Long productID){

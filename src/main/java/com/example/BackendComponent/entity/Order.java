@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -29,16 +30,9 @@ public class Order {
     @JoinColumn(name="providerID")
     private Provider orderProvider;
 
-    @ManyToOne
-    @JsonBackReference(value = "order-product")
-    @JoinColumn(name="productID")
-    private Product orderProduct;
-
-    @Column
-    private int orderQuantity;
-
-    @Column
-    private BigDecimal orderPrice;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order",cascade = CascadeType.REMOVE)
+    @JsonManagedReference(value = "order-detail")
+    private Set<OrderDetail> orderDetails;
 
     @OneToOne(mappedBy = "receiveOrder")
     @JsonManagedReference(value = "receive-order")
@@ -46,13 +40,11 @@ public class Order {
 
     public Order(){}
 
-    public Order(Long orderID, LocalDate orderDate, Staff orderStaff, Provider orderProvider, Product orderProduct, int orderQuantity) {
+    public Order(Long orderID, LocalDate orderDate, Staff orderStaff, Provider orderProvider) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.orderStaff = orderStaff;
         this.orderProvider = orderProvider;
-        this.orderProduct = orderProduct;
-        this.orderQuantity = orderQuantity;
     }
 
     public Long getOrderID() {
@@ -69,22 +61,6 @@ public class Order {
 
     public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public int getOrderQuantity() {
-        return orderQuantity;
-    }
-
-    public void setOrderQuantity(int orderQuantity) {
-        this.orderQuantity = orderQuantity;
-    }
-
-    public Product getOrderProduct() {
-        return orderProduct;
-    }
-
-    public void setOrderProduct(Product orderProduct) {
-        this.orderProduct = orderProduct;
     }
 
     //public void deleteOrderProduct(){this.orderProduct = null;}
@@ -107,14 +83,6 @@ public class Order {
         this.orderStaff = orderStaff;
     }
 
-    public BigDecimal getOrderPrice() {
-        return orderPrice;
-    }
-
-    public void setOrderPrice(BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
-    }
-
     public ReceivingNote getNoteForOrder() {
         return noteForOrder;
     }
@@ -123,17 +91,17 @@ public class Order {
         this.noteForOrder = noteForOrder;
     }
 
-    @PrePersist
-    @PreUpdate
-    public void setPrice(){
-        if(orderProduct!= null){
-            orderPrice = orderProduct.getPrice();
-        }
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     //public void deleteOrderStaff(){this.orderStaff = null;}
 
-    @Override
+    /*@Override
     public String toString() {
         String output = "Order{" +
                 "orderID=" + orderID +
@@ -150,5 +118,5 @@ public class Order {
         }
         output += '}';
         return output;
-    }
+    }*/
 }
