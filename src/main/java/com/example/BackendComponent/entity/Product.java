@@ -32,6 +32,9 @@ public class Product {
     @Column
     private BigDecimal price;
 
+    @Column(columnDefinition = "int default 0")
+    private int numberInStock;
+
     @ManyToOne
     @JsonBackReference(value = "product-category")
     @JoinColumn(name="categoryID")
@@ -121,6 +124,14 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public int getNumberInStock() {
+        return numberInStock;
+    }
+
+    public void setNumberInStock(int numberInStock) {
+        this.numberInStock = numberInStock;
     }
 
     public Category getCategory() {

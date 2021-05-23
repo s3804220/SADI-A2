@@ -5,6 +5,7 @@ import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.entity.Provider;
 import com.example.BackendComponent.entity.Staff;
 //import com.example.BackendComponent.service.UnifiedService;
+import com.example.BackendComponent.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderDetailService orderDetailService;
 
     /*public OrderController(OrderService orderService, UnifiedService unifiedService) {
         this.orderService = orderService;

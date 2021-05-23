@@ -30,7 +30,7 @@ public class Order {
     @JoinColumn(name="providerID")
     private Provider orderProvider;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order",cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = {CascadeType.ALL})
     @JsonManagedReference(value = "order-detail")
     private Set<OrderDetail> orderDetails;
 

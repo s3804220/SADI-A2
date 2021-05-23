@@ -3,6 +3,7 @@ package com.example.BackendComponent.controller;
 import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.entity.ReceivingNote;
+import com.example.BackendComponent.service.OrderService;
 import com.example.BackendComponent.service.ReceivingNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class ReceivingNoteController {
     @Autowired
     private ReceivingNoteService receivingNoteService;
 
+    @Autowired
+    private OrderService orderService;
+
     @GetMapping(path="/receive")
     public List<ReceivingNote> getAllReceivingNotes(){
         return receivingNoteService.getAllReceivingNotes();
@@ -29,6 +33,13 @@ public class ReceivingNoteController {
 
     @PostMapping(path="/receive")
     public ReceivingNote addReceivingNote(@RequestBody ReceivingNote receivingNote){
+        // retrieve Order & OrderDetails from orderID
+        Order order = orderService.getOrderByID(receivingNote.getReceiveOrder().getOrderID());
+
+        // transform OrderDetails into ReceivingNoteDetails
+        for (int i = 0; i < order.getOrderDetails().size(); i++) {
+
+        }
         return receivingNoteService.addReceivingNote(receivingNote);
     }
 
