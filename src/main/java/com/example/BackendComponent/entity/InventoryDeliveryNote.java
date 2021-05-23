@@ -1,8 +1,10 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "inventoryDeliveryNote")
@@ -18,19 +20,18 @@ public class InventoryDeliveryNote {
     @Column
     private Staff inventoryDeliveryNoteStaff;
 
-    @OneToOne(mappedBy = "inventoryDeliveryNote", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<InventoryDeliveryNote> inventoryDeliveryNoteList;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<InventoryDeliveryNote> inventoryDeliveryNoteList;
 
-    @ManyToOne
-    @JoinColumn(name = "inventoryDeliveryNoteStaff")
-    private List<Staff> staffList;
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Staff> staffList;
 
-    public InventoryDeliveryNote(int inventoryDeliveryNoteId, Date inventoryDeliveryNoteDate, Staff inventoryDeliveryNoteStaff, List<InventoryDeliveryNote> inventoryDeliveryNoteList, List<Staff> staffList) {
+    public InventoryDeliveryNote(int inventoryDeliveryNoteId, Date inventoryDeliveryNoteDate, Staff inventoryDeliveryNoteStaff) {
         this.inventoryDeliveryNoteId = inventoryDeliveryNoteId;
         this.inventoryDeliveryNoteDate = inventoryDeliveryNoteDate;
         this.inventoryDeliveryNoteStaff = inventoryDeliveryNoteStaff;
-        this.inventoryDeliveryNoteList = inventoryDeliveryNoteList;
-        this.staffList = staffList;
     }
 
     public int getInventoryDeliveryNoteId() {
@@ -57,19 +58,46 @@ public class InventoryDeliveryNote {
         this.inventoryDeliveryNoteStaff = inventoryDeliveryNoteStaff;
     }
 
-    public List<InventoryDeliveryNote> getInventoryDeliveryNoteList() {
+    public Set<InventoryDeliveryNote> getInventoryDeliveryNoteList() {
         return inventoryDeliveryNoteList;
     }
 
-    public void setInventoryDeliveryNoteList(List<InventoryDeliveryNote> inventoryDeliveryNoteList) {
+    public void setInventoryDeliveryNoteList(Set<InventoryDeliveryNote> inventoryDeliveryNoteList) {
         this.inventoryDeliveryNoteList = inventoryDeliveryNoteList;
     }
 
-    public List<Staff> getStaffList() {
+    public void addInventoryDeliveryNote(InventoryDeliveryNote inventoryDeliveryNote) {
+        this.inventoryDeliveryNoteList.add(inventoryDeliveryNote);
+    }
+
+    public void deleteInventoryDeliveryNote(InventoryDeliveryNote inventoryDeliveryNote) {
+        this.inventoryDeliveryNoteList.remove(inventoryDeliveryNote);
+    }
+
+    public Set<Staff> getStaffList() {
         return staffList;
     }
 
-    public void setStaffList(List<Staff> staffList) {
+    public void setStaffList(Set<Staff> staffList) {
         this.staffList = staffList;
+    }
+
+    public void addInventoryDeliveryNoteStaff (Staff staff) {
+        this.staffList.add(staff);
+    }
+
+    public void deleteInventoryDeliveryNoteStaff (Staff staff) {
+        this.staffList.remove(staff);
+    }
+
+    @Override
+    public String toString() {
+        return "InventoryDeliveryNote{" +
+                "inventoryDeliveryNoteId=" + inventoryDeliveryNoteId +
+                ", inventoryDeliveryNoteDate=" + inventoryDeliveryNoteDate +
+                ", inventoryDeliveryNoteStaff=" + inventoryDeliveryNoteStaff +
+                ", inventoryDeliveryNoteList=" + inventoryDeliveryNoteList +
+                ", staffList=" + staffList +
+                '}';
     }
 }

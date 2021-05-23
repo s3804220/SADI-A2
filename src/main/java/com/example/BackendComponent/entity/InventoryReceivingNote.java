@@ -1,8 +1,10 @@
 package com.example.BackendComponent.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "inventoryReceivingNote")
@@ -16,21 +18,20 @@ public class InventoryReceivingNote {
     private Date inventoryReceivingNoteDate;
 
     @Column
-    private int inventoryReceivingNoteStaff;
+    private Staff inventoryReceivingNoteStaff;
 
-    @OneToOne(mappedBy = "inventoryReceivingNote", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<InventoryReceivingNote> inventoryReceivingNoteList;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<InventoryReceivingNote> inventoryReceivingNoteList;
 
-    @ManyToOne
-    @JoinColumn(name = "inventoryReceivingNoteStaff")
-    private List<Staff> staffList;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Staff> staffList;
 
-    public InventoryReceivingNote(int inventoryReceivingNoteId, Date inventoryReceivingNoteDate, int inventoryReceivingNoteStaff, List<InventoryReceivingNote> inventoryReceivingNoteList, List<Staff> staffList) {
+    public InventoryReceivingNote(int inventoryReceivingNoteId, Date inventoryReceivingNoteDate, Staff inventoryReceivingNoteStaff) {
         this.inventoryReceivingNoteId = inventoryReceivingNoteId;
         this.inventoryReceivingNoteDate = inventoryReceivingNoteDate;
         this.inventoryReceivingNoteStaff = inventoryReceivingNoteStaff;
-        this.inventoryReceivingNoteList = inventoryReceivingNoteList;
-        this.staffList = staffList;
     }
 
     public int getInventoryReceivingNoteId() {
@@ -49,27 +50,54 @@ public class InventoryReceivingNote {
         this.inventoryReceivingNoteDate = inventoryReceivingNoteDate;
     }
 
-    public int getInventoryReceivingNoteStaff() {
+    public Staff getInventoryReceivingNoteStaff() {
         return inventoryReceivingNoteStaff;
     }
 
-    public void setInventoryReceivingNoteStaff(int inventoryReceivingNoteStaff) {
+    public void setInventoryReceivingNoteStaff(Staff inventoryReceivingNoteStaff) {
         this.inventoryReceivingNoteStaff = inventoryReceivingNoteStaff;
     }
 
-    public List<InventoryReceivingNote> getInventoryReceivingNoteList() {
+    public Set<InventoryReceivingNote> getInventoryReceivingNoteList() {
         return inventoryReceivingNoteList;
     }
 
-    public void setInventoryReceivingNoteList(List<InventoryReceivingNote> inventoryReceivingNoteList) {
+    public void setInventoryReceivingNoteList(Set<InventoryReceivingNote> inventoryReceivingNoteList) {
         this.inventoryReceivingNoteList = inventoryReceivingNoteList;
     }
 
-    public List<Staff> getStaffList() {
+    public void addInventoryReceivingNote(InventoryReceivingNote inventoryReceivingNote) {
+        this.inventoryReceivingNoteList.add(inventoryReceivingNote);
+    }
+
+    public void deleteInventoryReceivingNote(InventoryReceivingNote inventoryReceivingNote) {
+        this.inventoryReceivingNoteList.remove(inventoryReceivingNote);
+    }
+
+    public Set<Staff> getStaffList() {
         return staffList;
     }
 
-    public void setStaffList(List<Staff> staffList) {
+    public void setStaffList(Set<Staff> staffList) {
         this.staffList = staffList;
+    }
+
+    public void addInventoryReceivingStaff(Staff staff) {
+        this.staffList.add(staff);
+    }
+
+    public void deleteInventoryReceivingStaff(Staff staff) {
+        this.staffList.remove(staff);
+    }
+
+    @Override
+    public String toString() {
+        return "InventoryReceivingNote{" +
+                "inventoryReceivingNoteId=" + inventoryReceivingNoteId +
+                ", inventoryReceivingNoteDate=" + inventoryReceivingNoteDate +
+                ", inventoryReceivingNoteStaff=" + inventoryReceivingNoteStaff +
+                ", inventoryReceivingNoteList=" + inventoryReceivingNoteList +
+                ", staffList=" + staffList +
+                '}';
     }
 }
