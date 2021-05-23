@@ -47,7 +47,7 @@ public class Product {
 
     @JsonManagedReference(value = "delivery-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryProduct")
-    private Set<DeliveryNote> productDeliveryNotes;
+    private Set<DeliveryDetail> productDeliveryDetails;
 
     @JsonManagedReference(value = "sale-product")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleProduct")
@@ -149,12 +149,12 @@ public class Product {
         this.productReceivingDetails = productReceivingDetails;
     }
 
-    public Set<DeliveryNote> getProductDeliveryNotes() {
-        return productDeliveryNotes;
+    public Set<DeliveryDetail> getProductDeliveryDetails() {
+        return productDeliveryDetails;
     }
 
-    public void setProductDeliveryNotes(Set<DeliveryNote> productDeliveryNotes) {
-        this.productDeliveryNotes = productDeliveryNotes;
+    public void setProductDeliveryDetails(Set<DeliveryDetail> productDeliveryDetails) {
+        this.productDeliveryDetails = productDeliveryDetails;
     }
 
     public Set<SaleInvoice> getProductInvoice() {

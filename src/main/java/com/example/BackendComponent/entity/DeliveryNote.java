@@ -2,10 +2,12 @@ package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "deliverynote")
@@ -23,22 +25,16 @@ public class DeliveryNote {
     @JoinColumn(name="staffID")
     private Staff deliveryStaff;
 
-    @ManyToOne
-    @JsonBackReference(value = "delivery-product")
-    @JoinColumn(name="productID")
-    private Product deliveryProduct;
-
-    @Column
-    private int deliveryQuantity;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryNote",cascade = CascadeType.REMOVE)
+    @JsonManagedReference(value = "delivery-detail")
+    private Set<DeliveryDetail> deliveryDetails;
 
     public DeliveryNote(){}
 
-    public DeliveryNote(Long deliveryNoteID, LocalDate deliveryDate, Staff deliveryStaff, Product deliveryProduct, int deliveryQuantity){
+    public DeliveryNote(Long deliveryNoteID, LocalDate deliveryDate, Staff deliveryStaff){
         this.deliveryNoteID = deliveryNoteID;
         this.deliveryDate = deliveryDate;
         this.deliveryStaff = deliveryStaff;
-        this.deliveryProduct = deliveryProduct;
-        this.deliveryQuantity = deliveryQuantity;
     }
 
     public Long getDeliveryNoteID() {
@@ -65,19 +61,11 @@ public class DeliveryNote {
         this.deliveryStaff = deliveryStaff;
     }
 
-    public Product getDeliveryProduct() {
-        return deliveryProduct;
+    public Set<DeliveryDetail> getDeliveryDetails() {
+        return deliveryDetails;
     }
 
-    public void setDeliveryProduct(Product deliveryProduct) {
-        this.deliveryProduct = deliveryProduct;
-    }
-
-    public int getDeliveryQuantity() {
-        return deliveryQuantity;
-    }
-
-    public void setDeliveryQuantity(int deliveryQuantity) {
-        this.deliveryQuantity = deliveryQuantity;
+    public void setDeliveryDetails(Set<DeliveryDetail> deliveryDetails) {
+        this.deliveryDetails = deliveryDetails;
     }
 }
