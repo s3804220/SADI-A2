@@ -2,10 +2,12 @@ package com.example.BackendComponent.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "saleinvoice")
@@ -28,29 +30,20 @@ public class SaleInvoice {
     @JoinColumn(name="customerID")
     private Customer customer;
 
-    @ManyToOne
-    @JsonBackReference(value = "sale-product")
-    @JoinColumn(name="productID")
-    private Product saleProduct;
-
     @Column
-    private int saleQuantity;
+    private BigDecimal totalPrice;
 
-    @Column
-    private BigDecimal salePrice;
-
-    @Column
-    private BigDecimal totalValue;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleInvoice",cascade = CascadeType.REMOVE)
+    @JsonManagedReference(value = "sale-detail")
+    private Set<SaleDetail> saleDetails;
 
     public SaleInvoice(){}
 
-    public SaleInvoice(Long saleID, LocalDate saleDate, Staff saleStaff, Customer customer, Product saleProduct, int saleQuantity){
+    public SaleInvoice(Long saleID, LocalDate saleDate, Staff saleStaff, Customer customer){
         this.saleID = saleID;
         this.saleDate = saleDate;
         this.saleStaff = saleStaff;
         this.customer = customer;
-        this.saleProduct = saleProduct;
-        this.saleQuantity = saleQuantity;
     }
 
     public Long getSaleID() {
@@ -85,44 +78,27 @@ public class SaleInvoice {
         this.customer = customer;
     }
 
-    public Product getSaleProduct() {
-        return saleProduct;
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setSaleProduct(Product saleProduct) {
-        this.saleProduct = saleProduct;
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public int getSaleQuantity() {
-        return saleQuantity;
+    public Set<SaleDetail> getSaleDetails() {
+        return saleDetails;
     }
 
-    public void setSaleQuantity(int saleQuantity) {
-        this.saleQuantity = saleQuantity;
-    }
-
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(BigDecimal salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public BigDecimal getTotalValue() {
-        return totalValue;
-    }
-
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
+    public void setSaleDetails(Set<SaleDetail> saleDetails) {
+        this.saleDetails = saleDetails;
     }
 
     @PrePersist
     @PreUpdate
-    public void setValue(){
-        if(saleProduct != null){
-            salePrice = saleProduct.getPrice();
-            totalValue = salePrice.multiply(BigDecimal.valueOf(saleQuantity));
+    public void setPrice(){
+        for(SaleDetail aDetail : saleDetails){
+            totalPrice = totalPrice.add(aDetail.getTotalValue());
         }
     }
 }

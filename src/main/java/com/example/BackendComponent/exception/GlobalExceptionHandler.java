@@ -97,4 +97,44 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleStaffAlreadyExistException(StaffAlreadyExistException e) {
         return new ResponseEntity<>("A staff with that ID already exists!", HttpStatus.OK);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleSaleDetailNotFoundException(SaleDetailNotFoundException e) {
+        return new ResponseEntity<>("Could not find sale detail with that ID!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleSaleDetailAlreadyExistException(SaleDetailAlreadyExistException e) {
+        return new ResponseEntity<>("A sale detail with that ID already exists!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleOrderDetailNotFoundException(OrderDetailNotFoundException e) {
+        return new ResponseEntity<>("Could not find order detail with that ID!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleOrderDetailAlreadyExistException(OrderDetailAlreadyExistException e) {
+        return new ResponseEntity<>("An order detail with that ID already exists!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleReceivingDetailNotFoundException(ReceivingDetailNotFoundException e) {
+        return new ResponseEntity<>("Could not find receiving detail with that ID!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleReceivingDetailAlreadyExistException(ReceivingDetailAlreadyExistException e) {
+        return new ResponseEntity<>("A receiving detail with that ID already exists!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleDeliveryDetailNotFoundException(DeliveryDetailNotFoundException e) {
+        return new ResponseEntity<>("Could not find delivery detail with that ID!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleDeliveryDetailAlreadyExistException(DeliveryDetailAlreadyExistException e) {
+        return new ResponseEntity<>("A delivery detail with that ID already exists!", HttpStatus.OK);
+    }
 }
