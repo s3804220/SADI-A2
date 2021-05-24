@@ -17,10 +17,7 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Transactional
 @Service
@@ -59,12 +56,15 @@ public class ReceivingNoteService {
     public ReceivingNote updateReceivingNote(ReceivingNote receivingNote){
         if (receivingNoteRepository.existsById(receivingNote.getReceivingNoteID())){
             Set<ReceivingDetail> receivingDetailSet = receivingNoteRepository.getOne(receivingNote.getReceivingNoteID()).getReceivingDetails();
+            Set<ReceivingDetail> tempSet = new HashSet<>();
+            receivingNoteRepository.save(receivingNote);
             if(receivingDetailSet != null){
-                for(ReceivingDetail receivingDetail : receivingDetailSet){
-                    receivingDetailRepository.delete(receivingDetail);
+                tempSet.addAll(receivingDetailSet);
+                receivingDetailSet.clear();
+                for(ReceivingDetail aDetail: tempSet){
+                    receivingDetailRepository.delete(aDetail);
                 }
             }
-            receivingNoteRepository.save(receivingNote);
             if(receivingNote.getReceiveOrder() != null){
                 Long orderIdToTransfer = receivingNote.getReceiveOrder().getOrderID();
                 Order orderToTransfer = orderRepository.getOne(orderIdToTransfer);
@@ -79,8 +79,6 @@ public class ReceivingNoteService {
                         receivingDetailRepository.save(newReceivingDetail);
                     }
                 }
-            }else{
-                receivingNoteRepository.save(receivingNote);
             }
         }else {
             throw new ReceivingNoteNotFoundException(receivingNote.getReceivingNoteID());
