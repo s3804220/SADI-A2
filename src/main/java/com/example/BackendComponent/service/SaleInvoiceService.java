@@ -7,6 +7,8 @@ import com.example.BackendComponent.exception.SaleInvoiceAlreadyExistException;
 import com.example.BackendComponent.exception.SaleInvoiceNotFoundException;
 import com.example.BackendComponent.repository.SaleInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -59,7 +61,15 @@ public class SaleInvoiceService {
         return updateSaleInvoice(saleInvoiceToUpdate);
     }
 
-    public List<SaleInvoice> getAllSaleInvoice(){ return saleInvoiceRepository.findAll(); }
+    public List<SaleInvoice> getAllSaleInvoice(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return saleInvoiceRepository.findAll(pageable).getContent();
+    }
 
     public SaleInvoice getSaleInvoiceById(Long id){
         return saleInvoiceRepository.findById(id).orElseThrow(() ->
@@ -72,7 +82,7 @@ public class SaleInvoiceService {
         return saleInvoiceToDelete;
     }
 
-    public List<SaleInvoice> searchSaleBy(LocalDate startdate, LocalDate enddate){
+    public List<SaleInvoice> searchSaleBy(LocalDate startdate, LocalDate enddate, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -88,10 +98,16 @@ public class SaleInvoiceService {
                 e.printStackTrace();
             }
         }
-        return saleInvoiceRepository.searchSaleBy(fromdate, todate);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return saleInvoiceRepository.searchSaleBy(fromdate, todate, pageable).getContent();
     }
 
-    public List<SaleInvoice> searchSaleByStaff(LocalDate startdate, LocalDate enddate, Long staffid){
+    public List<SaleInvoice> searchSaleByStaff(LocalDate startdate, LocalDate enddate, Long staffid, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -107,10 +123,16 @@ public class SaleInvoiceService {
                 e.printStackTrace();
             }
         }
-        return saleInvoiceRepository.searchSaleByStaff(fromdate, todate, staffid);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return saleInvoiceRepository.searchSaleByStaff(fromdate, todate, staffid, pageable).getContent();
     }
 
-    public List<SaleInvoice> searchSaleByCustomer(LocalDate startdate, LocalDate enddate, Long custid){
+    public List<SaleInvoice> searchSaleByCustomer(LocalDate startdate, LocalDate enddate, Long custid, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -126,6 +148,12 @@ public class SaleInvoiceService {
                 e.printStackTrace();
             }
         }
-        return saleInvoiceRepository.searchSaleByCustomer(fromdate, todate, custid);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return saleInvoiceRepository.searchSaleByCustomer(fromdate, todate, custid, pageable).getContent();
     }
 }

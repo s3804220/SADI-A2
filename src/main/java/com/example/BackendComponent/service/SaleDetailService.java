@@ -12,6 +12,8 @@ import com.example.BackendComponent.repository.ProductRepository;
 import com.example.BackendComponent.repository.SaleDetailRepository;
 import com.example.BackendComponent.repository.SaleInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,8 +30,14 @@ public class SaleDetailService {
     @Autowired
     private SaleInvoiceRepository saleInvoiceRepository;
 
-    public List<SaleDetail> getAllSaleDetails(){
-        return saleDetailRepository.findAll();
+    public List<SaleDetail> getAllSaleDetails(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return saleDetailRepository.findAll(pageable).getContent();
     }
 
     public SaleDetail getSaleDetailByID(Long id){

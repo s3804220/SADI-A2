@@ -9,6 +9,7 @@ import com.example.BackendComponent.service.StaffService;
 //import com.example.BackendComponent.service.UnifiedService;
 import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,13 @@ public class StaffController {
     }*/
 
     @GetMapping(path="/staffs")
-    public List<Staff> getAllStaffs(){return staffService.getAllStaffs();}
+    public List<Staff> getAllStaffs(@RequestParam Optional<Integer> page){
+        if(page.isPresent()){
+            return staffService.getAllStaffsWithPage(page.get());
+        }else{
+            return staffService.getAllStaffs();
+        }
+    }
 
     @GetMapping(path="/staffs/{id}")
     public Staff getStaffById(@PathVariable Long id){return staffService.getStaffByID(id);}

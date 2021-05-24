@@ -45,7 +45,7 @@ public class UnifiedService {
                 e.printStackTrace();
             }
         }
-        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleBy(fromdate, todate);
+        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleBy(fromdate, todate, null).getContent();
         BigDecimal revenue = BigDecimal.ZERO;
         for(SaleInvoice saleInvoice : saleInvoiceList){
             revenue = revenue.add(saleInvoice.getTotalPrice());
@@ -75,7 +75,7 @@ public class UnifiedService {
                 e.printStackTrace();
             }
         }
-        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleByStaff(fromdate, todate, staffid);
+        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleByStaff(fromdate, todate, staffid, null).getContent();
         BigDecimal revenue = BigDecimal.ZERO;
         for(SaleInvoice saleInvoice : saleInvoiceList){
             revenue = revenue.add(saleInvoice.getTotalPrice());
@@ -105,7 +105,7 @@ public class UnifiedService {
                 e.printStackTrace();
             }
         }
-        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleByCustomer(fromdate, todate, custid);
+        List<SaleInvoice> saleInvoiceList = saleInvoiceRepository.searchSaleByCustomer(fromdate, todate, custid, null).getContent();
         BigDecimal revenue = BigDecimal.ZERO;
         for(SaleInvoice saleInvoice : saleInvoiceList){
             revenue = revenue.add(saleInvoice.getTotalPrice());

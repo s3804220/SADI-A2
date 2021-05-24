@@ -21,13 +21,6 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    //private final ProductService productService;
-
-    /*@Autowired
-    public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
-        this.categoryRepository = categoryRepository;
-        this.productService = productService;
-    }*/
 
     public Category addCategory(Category category){
         if(!categoryRepository.existsById(category.getCategoryID())){

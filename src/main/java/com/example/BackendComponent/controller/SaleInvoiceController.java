@@ -17,8 +17,14 @@ public class SaleInvoiceController {
     private SaleInvoiceService saleInvoiceService;
 
     @GetMapping(path="/sales")
-    public List<SaleInvoice> getAllSaleInvoices(){
-        return saleInvoiceService.getAllSaleInvoice();
+    public List<SaleInvoice> getAllSaleInvoices(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return saleInvoiceService.getAllSaleInvoice(thePage, pageable);
     }
 
     @GetMapping(path="/sales/{id}")
@@ -47,26 +53,44 @@ public class SaleInvoiceController {
     }
 
     @GetMapping(path="/sales/search")
-    public List<SaleInvoice> searchSaleBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<SaleInvoice> searchSaleBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return saleInvoiceService.searchSaleBy(fromdate, todate);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return saleInvoiceService.searchSaleBy(fromdate, todate, thePage, pageable);
     }
 
     @GetMapping(path="/sales/staff/{id}/search")
-    public List<SaleInvoice> searchSaleByStaff(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<SaleInvoice> searchSaleByStaff(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return saleInvoiceService.searchSaleByStaff(fromdate, todate, id);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return saleInvoiceService.searchSaleByStaff(fromdate, todate, id, thePage, pageable);
     }
 
     @GetMapping(path="/sales/customer/{id}/search")
-    public List<SaleInvoice> searchSaleByCustomer(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<SaleInvoice> searchSaleByCustomer(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return saleInvoiceService.searchSaleByCustomer(fromdate, todate, id);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return saleInvoiceService.searchSaleByCustomer(fromdate, todate, id, thePage, pageable);
     }
 }
