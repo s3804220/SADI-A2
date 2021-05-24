@@ -33,7 +33,7 @@ public class SaleInvoice {
     @Column
     private BigDecimal totalPrice;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleInvoice",cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleInvoice",cascade = CascadeType.ALL)
     @JsonManagedReference(value = "sale-detail")
     private Set<SaleDetail> saleDetails;
 
@@ -97,8 +97,13 @@ public class SaleInvoice {
     @PrePersist
     @PreUpdate
     public void setPrice(){
-        for(SaleDetail aDetail : saleDetails){
-            totalPrice = totalPrice.add(aDetail.getTotalValue());
+        if(saleDetails != null){
+            totalPrice = BigDecimal.ZERO;
+            for(SaleDetail aDetail : saleDetails){
+                if(aDetail.getTotalValue() != null){
+                    totalPrice = totalPrice.add(aDetail.getTotalValue());
+                }
+            }
         }
     }
 }

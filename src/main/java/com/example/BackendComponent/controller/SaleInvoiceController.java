@@ -41,11 +41,32 @@ public class SaleInvoiceController {
         return saleInvoiceService.updateSaleInvoice(saleInvoice);
     }
 
+    @GetMapping(path="/sales/update/{id}")
+    public SaleInvoice quickUpdateSaleInvoice(@PathVariable Long id){
+        return saleInvoiceService.quickUpdateSaleInvoice(id);
+    }
+
     @GetMapping(path="/sales/search")
     public List<SaleInvoice> searchSaleBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
         return saleInvoiceService.searchSaleBy(fromdate, todate);
+    }
+
+    @GetMapping(path="/sales/staff/{id}/search")
+    public List<SaleInvoice> searchSaleByStaff(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end){
+        LocalDate fromdate, todate;
+        fromdate = start.map(LocalDate::parse).orElse(null);
+        todate = end.map(LocalDate::parse).orElse(null);
+        return saleInvoiceService.searchSaleByStaff(fromdate, todate, id);
+    }
+
+    @GetMapping(path="/sales/customer/{id}/search")
+    public List<SaleInvoice> searchSaleByCustomer(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end){
+        LocalDate fromdate, todate;
+        fromdate = start.map(LocalDate::parse).orElse(null);
+        todate = end.map(LocalDate::parse).orElse(null);
+        return saleInvoiceService.searchSaleByCustomer(fromdate, todate, id);
     }
 }

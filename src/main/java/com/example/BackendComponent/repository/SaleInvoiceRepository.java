@@ -21,4 +21,9 @@ public interface SaleInvoiceRepository extends JpaRepository<SaleInvoice, Long> 
             "(coalesce(?2) IS NULL OR sa.saleDate <= CAST(?2 AS date)) AND" +
             "(?3 IS NULL OR sa.saleStaff.staffID=?3)")
     List<SaleInvoice> searchSaleByStaff(@Param("fromdate") @Temporal Date fromdate, @Param("todate") @Temporal Date todate, @Param("staffid") Long staffid);
+
+    @Query("SELECT sa FROM SaleInvoice sa WHERE (coalesce(?1) IS NULL OR sa.saleDate >= cast(?1 as date)) AND" +
+            "(coalesce(?2) IS NULL OR sa.saleDate <= CAST(?2 AS date)) AND" +
+            "(?3 IS NULL OR sa.customer.customerID=?3)")
+    List<SaleInvoice> searchSaleByCustomer(@Param("fromdate") @Temporal Date fromdate, @Param("todate") @Temporal Date todate, @Param("custid") Long custid);
 }

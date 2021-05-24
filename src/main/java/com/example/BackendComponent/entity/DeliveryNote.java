@@ -25,7 +25,7 @@ public class DeliveryNote {
     @JoinColumn(name="staffID")
     private Staff deliveryStaff;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryNote",cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "deliveryNote",cascade = CascadeType.ALL)
     @JsonManagedReference(value = "delivery-detail")
     private Set<DeliveryDetail> deliveryDetails;
 

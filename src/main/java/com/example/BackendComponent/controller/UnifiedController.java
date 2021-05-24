@@ -18,11 +18,4 @@ public class UnifiedController {
     @Autowired
     private UnifiedService unifiedService;
 
-    @GetMapping(path="/sales/staff")
-    public List<SaleInvoice> searchSaleByStaff(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Long staffid){
-        LocalDate fromdate, todate;
-        fromdate = start.map(LocalDate::parse).orElse(null);
-        todate = end.map(LocalDate::parse).orElse(null);
-        return unifiedService.searchSaleByStaff(fromdate, todate, staffid);
-    }
 }

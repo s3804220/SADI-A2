@@ -7,17 +7,21 @@ import com.example.BackendComponent.exception.ReceivingDetailNotFoundException;
 import com.example.BackendComponent.exception.ReceivingNoteAlreadyExistException;
 import com.example.BackendComponent.exception.ReceivingNoteNotFoundException;
 import com.example.BackendComponent.repository.ReceivingDetailRepository;
+import com.example.BackendComponent.repository.ReceivingNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Service
 public class ReceivingDetailService {
     @Autowired
     private ReceivingDetailRepository receivingDetailRepository;
+    @Autowired
+    private ReceivingNoteRepository receivingNoteRepository;
 
     public ReceivingDetail addReceivingDetail(ReceivingDetail receivingDetail){
         if (!receivingDetailRepository.existsById(receivingDetail.getReceivingDetailID())){
@@ -48,6 +52,12 @@ public class ReceivingDetailService {
 
     public ReceivingDetail deleteReceivingDetail(Long id){
         ReceivingDetail detailToDelete = getReceivingDetailByID(id);
+        if(detailToDelete.getReceivingNote() != null){
+            Long noteID = detailToDelete.getReceivingNote().getReceivingNoteID();
+            ReceivingNote receivingNote = receivingNoteRepository.getOne(noteID);
+            Set<ReceivingDetail> receivingDetailSet = receivingNote.getReceivingDetails();
+            receivingDetailSet.remove(detailToDelete);
+        }
         receivingDetailRepository.delete(detailToDelete);
         return detailToDelete;
     }

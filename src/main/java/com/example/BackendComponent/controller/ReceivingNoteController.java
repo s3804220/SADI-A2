@@ -27,6 +27,11 @@ public class ReceivingNoteController {
         return receivingNoteService.getReceivingNoteByID(id);
     }
 
+    @GetMapping(path="/receive/update/{id}")
+    public ReceivingNote quickUpdateReceivingNote(@PathVariable Long id){
+        return receivingNoteService.quickUpdateReceivingNote(id);
+    }
+
     @PostMapping(path="/receive")
     public ReceivingNote addReceivingNote(@RequestBody ReceivingNote receivingNote){
         return receivingNoteService.addReceivingNote(receivingNote);

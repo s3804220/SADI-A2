@@ -31,10 +31,11 @@ public class OrderDetail {
 
     public OrderDetail(){}
 
-    public OrderDetail(Long orderDetailID, Product orderProduct, int orderQuantity, Order order){
+    public OrderDetail(Long orderDetailID, Product orderProduct, int orderQuantity, BigDecimal orderPrice, Order order){
         this.orderDetailID = orderDetailID;
         this.orderProduct = orderProduct;
         this.orderQuantity = orderQuantity;
+        this.orderPrice = orderPrice;
         this.order = order;
     }
 
@@ -78,11 +79,11 @@ public class OrderDetail {
         this.order = order;
     }
 
-    @PrePersist
+    /*@PrePersist
     @PreUpdate
     public void setPrice(){
         if(orderProduct!= null){
             orderPrice = orderProduct.getPrice();
         }
-    }
+    }*/
 }

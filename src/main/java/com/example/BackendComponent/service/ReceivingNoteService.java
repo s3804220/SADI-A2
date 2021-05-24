@@ -7,6 +7,7 @@ import com.example.BackendComponent.entity.ReceivingNote;
 import com.example.BackendComponent.exception.OrderNotFoundException;
 import com.example.BackendComponent.exception.ReceivingNoteAlreadyExistException;
 import com.example.BackendComponent.exception.ReceivingNoteNotFoundException;
+import com.example.BackendComponent.repository.OrderRepository;
 import com.example.BackendComponent.repository.ReceivingDetailRepository;
 import com.example.BackendComponent.repository.ReceivingNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,25 @@ public class ReceivingNoteService {
     private ReceivingNoteRepository receivingNoteRepository;
     @Autowired
     private ReceivingDetailRepository receivingDetailRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     public ReceivingNote addReceivingNote(ReceivingNote receivingNote){
         if (!receivingNoteRepository.existsById(receivingNote.getReceivingNoteID())){
             receivingNoteRepository.save(receivingNote);
             if(receivingNote.getReceiveOrder() != null){
-                Set<OrderDetail> orderDetailSet = receivingNote.getReceiveOrder().getOrderDetails();
-                for(OrderDetail orderDetail : orderDetailSet){
-                    ReceivingDetail newReceivingDetail = new ReceivingDetail();
-                    newReceivingDetail.setReceivingNote(receivingNote);
-                    newReceivingDetail.setReceivingDetailID(orderDetail.getOrderDetailID());
-                    newReceivingDetail.setReceiveProduct(orderDetail.getOrderProduct());
-                    newReceivingDetail.setReceiveQuantity(orderDetail.getOrderQuantity());
-                    receivingDetailRepository.save(newReceivingDetail);
+                Long orderIdToTransfer = receivingNote.getReceiveOrder().getOrderID();
+                Order orderToTransfer = orderRepository.getOne(orderIdToTransfer);
+                Set<OrderDetail> orderDetailSet = orderToTransfer.getOrderDetails();
+                if(orderDetailSet != null){
+                    for(OrderDetail orderDetail : orderDetailSet){
+                        ReceivingDetail newReceivingDetail = new ReceivingDetail();
+                        newReceivingDetail.setReceivingNote(receivingNote);
+                        newReceivingDetail.setReceivingDetailID(orderDetail.getOrderDetailID());
+                        newReceivingDetail.setReceiveProduct(orderDetail.getOrderProduct());
+                        newReceivingDetail.setReceiveQuantity(orderDetail.getOrderQuantity());
+                        receivingDetailRepository.save(newReceivingDetail);
+                    }
                 }
             }
         }else{
@@ -51,14 +58,18 @@ public class ReceivingNoteService {
 
     public ReceivingNote updateReceivingNote(ReceivingNote receivingNote){
         if (receivingNoteRepository.existsById(receivingNote.getReceivingNoteID())){
-            if(!Objects.equals(receivingNoteRepository.getOne(receivingNote.getReceivingNoteID()).getReceiveOrder().getOrderID(),receivingNote.getReceiveOrder().getOrderID())){
-                Set<ReceivingDetail> receivingDetailSet = receivingNoteRepository.getOne(receivingNote.getReceivingNoteID()).getReceivingDetails();
+            Set<ReceivingDetail> receivingDetailSet = receivingNoteRepository.getOne(receivingNote.getReceivingNoteID()).getReceivingDetails();
+            if(receivingDetailSet != null){
                 for(ReceivingDetail receivingDetail : receivingDetailSet){
                     receivingDetailRepository.delete(receivingDetail);
                 }
-                receivingNoteRepository.save(receivingNote);
-                if(receivingNote.getReceiveOrder() != null){
-                    Set<OrderDetail> orderDetailSet = receivingNote.getReceiveOrder().getOrderDetails();
+            }
+            receivingNoteRepository.save(receivingNote);
+            if(receivingNote.getReceiveOrder() != null){
+                Long orderIdToTransfer = receivingNote.getReceiveOrder().getOrderID();
+                Order orderToTransfer = orderRepository.getOne(orderIdToTransfer);
+                Set<OrderDetail> orderDetailSet = orderToTransfer.getOrderDetails();
+                if(orderDetailSet != null){
                     for(OrderDetail orderDetail : orderDetailSet){
                         ReceivingDetail newReceivingDetail = new ReceivingDetail();
                         newReceivingDetail.setReceivingNote(receivingNote);
@@ -75,6 +86,11 @@ public class ReceivingNoteService {
             throw new ReceivingNoteNotFoundException(receivingNote.getReceivingNoteID());
         }
         return receivingNote;
+    }
+
+    public ReceivingNote quickUpdateReceivingNote(Long id){
+        ReceivingNote noteToUpdate = getReceivingNoteByID(id);
+        return updateReceivingNote(noteToUpdate);
     }
 
     public List<ReceivingNote> getAllReceivingNotes(){

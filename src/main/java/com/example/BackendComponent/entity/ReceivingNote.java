@@ -30,7 +30,7 @@ public class ReceivingNote {
     @JoinColumn(name = "orderID")
     private Order receiveOrder;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receivingNote",cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receivingNote",cascade = CascadeType.ALL)
     @JsonManagedReference(value = "receive-detail")
     private Set<ReceivingDetail> receivingDetails;
 
