@@ -20,19 +20,15 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    /*@Autowired
-    public StaffController(StaffService staffService, UnifiedService unifiedService) {
-        this.staffService = staffService;
-        this.unifiedService = unifiedService;
-    }*/
-
     @GetMapping(path="/staffs")
     public List<Staff> getAllStaffs(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
         if(page.isPresent()){
-            return staffService.getAllStaffsWithPage(page.get());
-        }else{
-            return staffService.getAllStaffs();
+            thePage = page.get();
         }
+        return staffService.getAllStaffs(thePage,pageable);
     }
 
     @GetMapping(path="/staffs/{id}")
@@ -55,12 +51,18 @@ public class StaffController {
     }*/
 
     @GetMapping(path="/staffs/search")
-    public List<Staff> searchStaffBy(@RequestParam Optional<String> name, @RequestParam Optional<String> address, @RequestParam Optional<String> phone, @RequestParam Optional<String> email){
+    public List<Staff> searchStaffBy(@RequestParam Optional<String> name, @RequestParam Optional<String> address, @RequestParam Optional<String> phone, @RequestParam Optional<String> email,@RequestParam Optional<Integer> page){
         String newname, newaddress, newphone, newemail;
         newname = name.orElse(null);
         newaddress = address.orElse(null);
         newphone = phone.orElse(null);
         newemail = email.orElse(null);
-        return staffService.searchStaffBy(newname, newaddress, newphone, newemail);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return staffService.searchStaffBy(newname, newaddress, newphone, newemail, thePage, pageable);
     }
 }

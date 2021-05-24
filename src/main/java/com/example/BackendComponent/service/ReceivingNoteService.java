@@ -11,6 +11,8 @@ import com.example.BackendComponent.repository.OrderRepository;
 import com.example.BackendComponent.repository.ReceivingDetailRepository;
 import com.example.BackendComponent.repository.ReceivingNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -91,8 +93,14 @@ public class ReceivingNoteService {
         return updateReceivingNote(noteToUpdate);
     }
 
-    public List<ReceivingNote> getAllReceivingNotes(){
-        return receivingNoteRepository.findAll();
+    public List<ReceivingNote> getAllReceivingNotes(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return receivingNoteRepository.findAll(pageable).getContent();
     }
 
     public ReceivingNote getReceivingNoteByID(Long id){
@@ -106,7 +114,7 @@ public class ReceivingNoteService {
         return receivingNoteToDelete;
     }
 
-    public List<ReceivingNote> searchReceivingNoteBy(LocalDate startdate, LocalDate enddate){
+    public List<ReceivingNote> searchReceivingNoteBy(LocalDate startdate, LocalDate enddate, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -122,6 +130,12 @@ public class ReceivingNoteService {
                 e.printStackTrace();
             }
         }
-        return receivingNoteRepository.searchReceivingNoteBy(fromdate, todate);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return receivingNoteRepository.searchReceivingNoteBy(fromdate, todate, pageable).getContent();
     }
 }

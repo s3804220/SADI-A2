@@ -9,6 +9,8 @@ import com.example.BackendComponent.exception.ReceivingNoteNotFoundException;
 import com.example.BackendComponent.repository.ReceivingDetailRepository;
 import com.example.BackendComponent.repository.ReceivingNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,8 +43,14 @@ public class ReceivingDetailService {
         return receivingDetail;
     }
 
-    public List<ReceivingDetail> getAllReceivingDetails(){
-        return receivingDetailRepository.findAll();
+    public List<ReceivingDetail> getAllReceivingDetails(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return receivingDetailRepository.findAll(pageable).getContent();
     }
 
     public ReceivingDetail getReceivingDetailByID(Long id){

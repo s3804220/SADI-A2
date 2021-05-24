@@ -7,6 +7,8 @@ import com.example.BackendComponent.exception.*;
 import com.example.BackendComponent.repository.DeliveryDetailRepository;
 import com.example.BackendComponent.repository.DeliveryNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,8 +41,14 @@ public class DeliveryDetailService {
         return deliveryDetail;
     }
 
-    public List<DeliveryDetail> getAllDeliveryDetails(){
-        return deliveryDetailRepository.findAll();
+    public List<DeliveryDetail> getAllDeliveryDetails(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return deliveryDetailRepository.findAll(pageable).getContent();
     }
 
     public DeliveryDetail getDeliveryDetailByID(Long id){

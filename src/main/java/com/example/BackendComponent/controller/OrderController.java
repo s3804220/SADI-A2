@@ -27,8 +27,14 @@ public class OrderController {
     }*/
 
     @GetMapping(path="/orders")
-    public List<Order> getAllOrder(){
-        return orderService.getAllOrders();
+    public List<Order> getAllOrder(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return orderService.getAllOrders(thePage,pageable);
     }
 
     @GetMapping(path="/orders/{id}")
@@ -52,11 +58,17 @@ public class OrderController {
     }
 
     @GetMapping(path="/orders/search")
-    public List<Order> searchOrderBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<Order> searchOrderBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return orderService.searchOrderBy(fromdate, todate);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return orderService.searchOrderBy(fromdate, todate, thePage, pageable);
     }
 
     /*@GetMapping(path="/orders/{orderID}/details")

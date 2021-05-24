@@ -20,11 +20,6 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    /*@Autowired
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }*/
-
     public Customer addCustomer(Customer customer){
         if(!customerRepository.existsById(customer.getCustomerID())){
             customerRepository.save(customer);

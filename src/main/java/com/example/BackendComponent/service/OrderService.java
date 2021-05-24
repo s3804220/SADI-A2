@@ -5,6 +5,8 @@ import com.example.BackendComponent.exception.OrderAlreadyExistException;
 import com.example.BackendComponent.exception.OrderNotFoundException;
 import com.example.BackendComponent.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,8 +23,14 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List<Order> getAllOrders(){
-        return orderRepository.findAll();
+    public List<Order> getAllOrders(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return orderRepository.findAll(pageable).getContent();
     }
 
     public Order getOrderByID(Long id){
@@ -61,7 +69,7 @@ public class OrderService {
         return orderToUpdate;
     }*/
 
-    public List<Order> searchOrderBy(LocalDate startdate, LocalDate enddate){
+    public List<Order> searchOrderBy(LocalDate startdate, LocalDate enddate, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -77,7 +85,13 @@ public class OrderService {
                 e.printStackTrace();
             }
         }
-        return orderRepository.searchOrderBy(fromdate, todate);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return orderRepository.searchOrderBy(fromdate, todate, pageable).getContent();
     }
 
     /*public String getOrderDetails(Long orderID){

@@ -1,7 +1,8 @@
 package com.example.BackendComponent.repository;
 
 import com.example.BackendComponent.entity.Order;
-import com.example.BackendComponent.entity.Staff;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Temporal;
@@ -19,5 +20,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "((coalesce(?1) IS NOT NULL AND coalesce(?2) IS NOT NULL) AND o.orderDate >= cast(?1 as date) AND o.orderDate <= CAST(?2 AS date))")*/
     @Query("SELECT o FROM Order o WHERE (coalesce(?1) IS NULL OR o.orderDate >= cast(?1 as date)) AND" +
             "(coalesce(?2) IS NULL OR o.orderDate <= CAST(?2 AS date))")
-    List<Order> searchOrderBy(@Param("fromdate") @Temporal Date fromdate, @Param("todate") @Temporal Date todate);
+    Page<Order> searchOrderBy(@Param("fromdate") @Temporal Date fromdate, @Param("todate") @Temporal Date todate, Pageable pageable);
 }

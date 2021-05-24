@@ -7,6 +7,8 @@ import com.example.BackendComponent.exception.OrderDetailNotFoundException;
 import com.example.BackendComponent.repository.OrderDetailRepository;
 import com.example.BackendComponent.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,8 +23,14 @@ public class OrderDetailService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List<OrderDetail> getAllOrderDetails(){
-        return orderDetailRepository.findAll();
+    public List<OrderDetail> getAllOrderDetails(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return orderDetailRepository.findAll(pageable).getContent();
     }
 
     public OrderDetail getOrderDetailByID(Long id){

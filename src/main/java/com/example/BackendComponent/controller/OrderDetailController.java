@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -15,8 +16,14 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     @GetMapping(path="/orderdetail")
-    public List<OrderDetail> getAllOrderDetails(){
-        return orderDetailService.getAllOrderDetails();
+    public List<OrderDetail> getAllOrderDetails(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return orderDetailService.getAllOrderDetails(thePage,pageable);
     }
 
     @GetMapping(path="/orderdetail/{id}")

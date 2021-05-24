@@ -18,8 +18,14 @@ public class ReceivingNoteController {
     private ReceivingNoteService receivingNoteService;
 
     @GetMapping(path="/receive")
-    public List<ReceivingNote> getAllReceivingNotes(){
-        return receivingNoteService.getAllReceivingNotes();
+    public List<ReceivingNote> getAllReceivingNotes(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return receivingNoteService.getAllReceivingNotes(thePage,pageable);
     }
 
     @GetMapping(path="/receive/{id}")
@@ -48,10 +54,16 @@ public class ReceivingNoteController {
     }
 
     @GetMapping(path="/receive/search")
-    public List<ReceivingNote> searchReceivingNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<ReceivingNote> searchReceivingNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return receivingNoteService.searchReceivingNoteBy(fromdate, todate);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return receivingNoteService.searchReceivingNoteBy(fromdate, todate, thePage, pageable);
     }
 }

@@ -21,11 +21,6 @@ public class StaffService {
     @Autowired
     private StaffRepository staffRepository;
 
-    /*@Autowired
-    public StaffService(StaffRepository staffRepository, OrderService orderService) {
-        this.staffRepository = staffRepository;
-    }*/
-
     public Staff addStaff(Staff staff){
         if(!staffRepository.existsById(staff.getStaffID())){
             staffRepository.save(staff);
@@ -44,12 +39,13 @@ public class StaffService {
         return staff;
     }
 
-    public List<Staff> getAllStaffs(){
-        return staffRepository.findAll();
-    }
-
-    public List<Staff> getAllStaffsWithPage(int page){
-        Pageable pageable = PageRequest.of(page, 3);
+    public List<Staff> getAllStaffs(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
         return staffRepository.findAll(pageable).getContent();
     }
 
@@ -64,8 +60,14 @@ public class StaffService {
         return staff;
     }
 
-    public List<Staff> searchStaffBy(String name, String address, String phone, String email){
-        return staffRepository.searchStaffBy(name,address,phone,email);
+    public List<Staff> searchStaffBy(String name, String address, String phone, String email, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return staffRepository.searchStaffBy(name,address,phone,email, pageable).getContent();
     }
 
     /*public Staff updateStaff(Long id, Staff newStaff){

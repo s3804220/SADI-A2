@@ -8,6 +8,8 @@ import com.example.BackendComponent.exception.ReceivingNoteAlreadyExistException
 import com.example.BackendComponent.exception.ReceivingNoteNotFoundException;
 import com.example.BackendComponent.repository.DeliveryNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,8 +43,14 @@ public class DeliveryNoteService {
         return deliveryNote;
     }
 
-    public List<DeliveryNote> getAllDeliveryNotes(){
-        return deliveryNoteRepository.findAll();
+    public List<DeliveryNote> getAllDeliveryNotes(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return deliveryNoteRepository.findAll(pageable).getContent();
     }
 
     public DeliveryNote getDeliveryNoteByID(Long id){
@@ -56,7 +64,7 @@ public class DeliveryNoteService {
         return deliveryNoteToDelete;
     }
 
-    public List<DeliveryNote> searchDeliveryNoteBy(LocalDate startdate, LocalDate enddate){
+    public List<DeliveryNote> searchDeliveryNoteBy(LocalDate startdate, LocalDate enddate, int page, boolean pageBool){
         Date fromdate = null,todate = null;
         if(startdate != null){
             try {
@@ -72,6 +80,12 @@ public class DeliveryNoteService {
                 e.printStackTrace();
             }
         }
-        return deliveryNoteRepository.searchDeliveryNoteBy(fromdate, todate);
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return deliveryNoteRepository.searchDeliveryNoteBy(fromdate, todate, pageable).getContent();
     }
 }

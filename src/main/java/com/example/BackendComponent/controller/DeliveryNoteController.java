@@ -18,8 +18,14 @@ public class DeliveryNoteController {
     private DeliveryNoteService deliveryNoteService;
 
     @GetMapping(path="/delivery")
-    public List<DeliveryNote> getAllDeliveryNotes(){
-        return deliveryNoteService.getAllDeliveryNotes();
+    public List<DeliveryNote> getAllDeliveryNotes(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return deliveryNoteService.getAllDeliveryNotes(thePage,pageable);
     }
 
     @GetMapping(path="/delivery/{id}")
@@ -43,10 +49,16 @@ public class DeliveryNoteController {
     }
 
     @GetMapping(path="/delivery/search")
-    public List<DeliveryNote> searchDeliveryNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end){
+    public List<DeliveryNote> searchDeliveryNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
         todate = end.map(LocalDate::parse).orElse(null);
-        return deliveryNoteService.searchDeliveryNoteBy(fromdate, todate);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return deliveryNoteService.searchDeliveryNoteBy(fromdate, todate, thePage, pageable);
     }
 }

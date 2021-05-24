@@ -140,8 +140,8 @@ public class UnifiedService {
             }
         }
         String dateString = "Date: "+start +" - " + end;
-        List<ReceivingNote> receivingNoteList = receivingNoteRepository.searchReceivingNoteBy(fromdate, todate);
-        List<DeliveryNote> deliveryNoteList = deliveryNoteRepository.searchDeliveryNoteBy(fromdate, todate);
+        List<ReceivingNote> receivingNoteList = receivingNoteRepository.searchReceivingNoteBy(fromdate, todate, null).getContent();
+        List<DeliveryNote> deliveryNoteList = deliveryNoteRepository.searchDeliveryNoteBy(fromdate, todate, null).getContent();
         List<Product> productList = productRepository.findAll();
         List<Object> resultList = new ArrayList<>();
         resultList.add(dateString);

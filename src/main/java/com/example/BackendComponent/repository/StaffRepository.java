@@ -1,6 +1,8 @@
 package com.example.BackendComponent.repository;
 
 import com.example.BackendComponent.entity.Staff;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,5 +17,5 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
             +"(?2 is null or LOWER(s.staffAddress) like LOWER(CONCAT('%',CAST(?2 AS text),'%'))) AND"
             +"(?3 is null or LOWER(s.staffPhone) like LOWER(CONCAT('%',CAST(?3 AS text),'%'))) AND"
             + "(?4 is null or LOWER(s.staffEmail) like LOWER(CONCAT('%',CAST(?4 AS text),'%')))")
-    List<Staff> searchStaffBy(@Param("name") String name, @Param("address") String address, @Param("phone") String phone, @Param("email") String email);
+    Page<Staff> searchStaffBy(@Param("name") String name, @Param("address") String address, @Param("phone") String phone, @Param("email") String email, Pageable pageable);
 }
