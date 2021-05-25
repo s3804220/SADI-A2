@@ -5,6 +5,8 @@ import com.example.BackendComponent.exception.CustomerNotFoundException;
 import com.example.BackendComponent.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,11 +40,34 @@ public class CustomerService {
         return customer;
     }
 
-    public List<Customer> getAllCustomer(String keyword){
-        if(keyword != null){
-            return customerRepository.search(keyword);
+    public List<Customer> getAllCustomer(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
         }
-        return customerRepository.findAll();
+        return customerRepository.findAll(pageable).getContent();
+    }
+
+    public List<Customer> searchCustomer(String keyword,int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return customerRepository.search(keyword,pageable).getContent();
+    }
+
+    public List<Customer> searchCustomerBy(String name, String address, String phone, String fax, String email, String contact, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return customerRepository.searchCustomerBy(name,address,phone,fax,email,contact, pageable).getContent();
     }
 
     public Customer getCustomerByID(Long id){

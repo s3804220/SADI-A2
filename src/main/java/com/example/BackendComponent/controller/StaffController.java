@@ -45,12 +45,18 @@ public class StaffController {
         return staffService.updateStaff(staff);
     }
 
-    /*@RequestMapping(path="/staffs/search")
-    public List<Staff> searchStaff(@Param("keyword") String keyword){
-        return staffService.getAllStaffs(keyword);
-    }*/
-
     @GetMapping(path="/staffs/search")
+    public List<Staff> searchStaff(@RequestParam("keyword") String keyword, @RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return staffService.searchStaff(keyword,thePage,pageable);
+    }
+
+    @GetMapping(path="/staffs/search/filter")
     public List<Staff> searchStaffBy(@RequestParam Optional<String> name, @RequestParam Optional<String> address, @RequestParam Optional<String> phone, @RequestParam Optional<String> email,@RequestParam Optional<Integer> page){
         String newname, newaddress, newphone, newemail;
         newname = name.orElse(null);

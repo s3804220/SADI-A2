@@ -13,6 +13,9 @@ import java.util.List;
 
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
+    @Query("SELECT s FROM Staff s WHERE UPPER(CONCAT(s.staffName, '', s.staffAddress, '', s.staffEmail, '', s.staffPhone, '')) LIKE UPPER(CONCAT('%', ?1, '%'))")
+    Page<Staff> search(String keyword, Pageable pageable);
+
     @Query("SELECT s FROM Staff s WHERE (?1 IS NULL OR LOWER(s.staffName) LIKE LOWER(CONCAT('%',CAST(?1 AS text),'%'))) AND"
             +"(?2 is null or LOWER(s.staffAddress) like LOWER(CONCAT('%',CAST(?2 AS text),'%'))) AND"
             +"(?3 is null or LOWER(s.staffPhone) like LOWER(CONCAT('%',CAST(?3 AS text),'%'))) AND"

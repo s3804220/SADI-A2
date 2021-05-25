@@ -1,7 +1,6 @@
 package com.example.BackendComponent.repository;
 
 import com.example.BackendComponent.entity.Customer;
-import com.example.BackendComponent.entity.Staff;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
     @Query("SELECT c FROM Customer c WHERE UPPER(CONCAT(c.customerName, '', c.customerAddress, '', c.customerContactPerson, '', c.customerEmail, '', c.customerFax, '', c.customerPhone, '')) LIKE UPPER(CONCAT('%', ?1, '%'))")
-    List<Customer> search(String keyword);
+    Page<Customer> search(String keyword, Pageable pageable);
 
     @Query("SELECT c FROM Customer c WHERE (?1 IS NULL OR LOWER(c.customerName) LIKE LOWER(CONCAT('%',CAST(?1 AS text),'%'))) AND"
             +"(?2 is null or LOWER(c.customerAddress) like LOWER(CONCAT('%',CAST(?2 AS text),'%'))) AND"

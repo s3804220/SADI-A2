@@ -1,6 +1,7 @@
 package com.example.BackendComponent.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.BackendComponent.service.CustomerService;
 import com.example.BackendComponent.entity.Customer;
@@ -14,13 +15,16 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    /*@Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }*/
-
     @GetMapping(path="/customers")
-    public List<Customer> getAllCustomer(){return customerService.getAllCustomer(null);}
+    public List<Customer> getAllCustomer(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return customerService.getAllCustomer(thePage, pageable);
+    }
 
     @GetMapping(path="/customers/{id}")
     public Customer getCustomerByID(@PathVariable Long id){return customerService.getCustomerByID(id);}
@@ -36,8 +40,32 @@ public class CustomerController {
     @DeleteMapping(path="/customers/{id}")
     public Customer deleteCustomer(@PathVariable Long id){return customerService.deleteCustomer(id);}
 
-    @RequestMapping(path="/customers/search")
-    public List<Customer> searchCustomer(@Param("keyword") String keyword){
-        return customerService.getAllCustomer(keyword);
+    @GetMapping(path="/customers/search")
+    public List<Customer> searchCustomer(@RequestParam("keyword") String keyword, @RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return customerService.searchCustomer(keyword,thePage,pageable);
+    }
+
+    @GetMapping(path="/customers/search/filter")
+    public List<Customer> searchCustomerBy(@RequestParam Optional<String> name, @RequestParam Optional<String> address, @RequestParam Optional<String> phone, @RequestParam Optional<String> fax, @RequestParam Optional<String> email,@RequestParam Optional<String> contact, @RequestParam Optional<Integer> page){
+        String newname, newaddress, newphone, newfax, newemail, newcontact;
+        newname = name.orElse(null);
+        newaddress = address.orElse(null);
+        newphone = phone.orElse(null);
+        newfax = fax.orElse(null);
+        newemail = email.orElse(null);
+        newcontact = contact.orElse(null);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return customerService.searchCustomerBy(newname,newaddress,newphone,newfax,newemail,newcontact,thePage,pageable);
     }
 }

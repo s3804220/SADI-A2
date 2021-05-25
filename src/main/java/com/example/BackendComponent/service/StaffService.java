@@ -1,5 +1,6 @@
 package com.example.BackendComponent.service;
 
+import com.example.BackendComponent.entity.Customer;
 import com.example.BackendComponent.exception.StaffAlreadyExistException;
 import com.example.BackendComponent.exception.StaffNotFoundException;
 import com.example.BackendComponent.repository.StaffRepository;
@@ -58,6 +59,16 @@ public class StaffService {
         Staff staff = getStaffByID(id);
         staffRepository.delete(staff);
         return staff;
+    }
+
+    public List<Staff> searchStaff(String keyword, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return staffRepository.search(keyword,pageable).getContent();
     }
 
     public List<Staff> searchStaffBy(String name, String address, String phone, String email, int page, boolean pageBool){
