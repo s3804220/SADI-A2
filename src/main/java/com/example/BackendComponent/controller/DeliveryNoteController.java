@@ -48,7 +48,7 @@ public class DeliveryNoteController {
         return deliveryNoteService.updateDeliveryNote(deliveryNote);
     }
 
-    @GetMapping(path="/delivery/search")
+    @GetMapping(path="/delivery/search/filter")
     public List<DeliveryNote> searchDeliveryNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);

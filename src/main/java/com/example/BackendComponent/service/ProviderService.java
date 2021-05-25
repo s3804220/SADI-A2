@@ -1,10 +1,13 @@
 package com.example.BackendComponent.service;
 
+import com.example.BackendComponent.entity.Customer;
 import com.example.BackendComponent.entity.Provider;
 import com.example.BackendComponent.exception.ProviderAlreadyExistException;
 import com.example.BackendComponent.exception.ProviderNotFoundException;
 import com.example.BackendComponent.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,13 +18,6 @@ import java.util.List;
 public class ProviderService {
     @Autowired
     private ProviderRepository providerRepository;
-    //private final OrderService orderService;
-
-    /*@Autowired
-    public ProviderService(ProviderRepository providerRepository, OrderService orderService) {
-        this.providerRepository = providerRepository;
-        this.orderService = orderService;
-    }*/
 
     public Provider addProvider(Provider provider){
         if(!providerRepository.existsById(provider.getProviderID())){
@@ -41,11 +37,34 @@ public class ProviderService {
         return provider;
     }
 
-    public List<Provider> getAllProvider(String keyword){
-        if (keyword != null){
-            return providerRepository.search(keyword);
+    public List<Provider> getAllProvider(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
         }
-        return providerRepository.findAll();
+        return providerRepository.findAll(pageable).getContent();
+    }
+
+    public List<Provider> searchProvider(String keyword, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return providerRepository.search(keyword,pageable).getContent();
+    }
+
+    public List<Provider> searchProviderBy(String name, String address, String phone, String fax, String email, String contact, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return providerRepository.searchProviderBy(name,address,phone,fax,email,contact, pageable).getContent();
     }
 
     public Provider getProviderByID(Long id){

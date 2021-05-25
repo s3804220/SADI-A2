@@ -4,9 +4,13 @@ import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.exception.ProductAlreadyExistException;
 import com.example.BackendComponent.exception.ProductNotFoundException;
 import com.example.BackendComponent.repository.ProductRepository;
+import org.hibernate.type.BigDecimalType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -14,11 +18,6 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-
-    /*@Autowired
-    public ProductService(ProductRepository productRepository, OrderService orderService) {
-        this.productRepository = productRepository;
-    }*/
 
     public Product addProduct(Product product){
         if(!productRepository.existsById(product.getProductID())){
@@ -38,16 +37,34 @@ public class ProductService {
         return product;
     }
 
-    /*public List<Product> getAllProducts(){
-        return StreamSupport
-                .stream(productRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }*/
-    public List<Product> getAllProducts(String keyword){
-        if (keyword != null){
-            return productRepository.search(keyword);
+    public List<Product> getAllProducts(int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
         }
-        return productRepository.findAll();
+        return productRepository.findAll(pageable).getContent();
+    }
+
+    public List<Product> searchProduct(String keyword, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return productRepository.search(keyword,pageable).getContent();
+    }
+
+    public List<Product> searchProductBy(String name, String model, String brand, String company, String description, BigDecimal minprice, BigDecimal maxprice, int page, boolean pageBool){
+        Pageable pageable;
+        if(pageBool){
+            pageable = PageRequest.of(page, 3);
+        }else{
+            pageable = Pageable.unpaged();
+        }
+        return productRepository.searchProductBy(name,model,brand,company,description,minprice,maxprice, pageable).getContent();
     }
 
     public Product getProductById(Long id){

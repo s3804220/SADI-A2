@@ -1,8 +1,11 @@
 package com.example.BackendComponent.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.type.BigDecimalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +19,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //private final UnifiedService unifiedService;
-
-    /*@Autowired
-    public ProductController(ProductService productService, UnifiedService unifiedService, UnifiedService unifiedService1) {
-        this.productService = productService;
-        this.unifiedService = unifiedService1;
-    }*/
-
     @GetMapping(path="/products")
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts(null);
+    public List<Product> getAllProducts(@RequestParam Optional<Integer> page){
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return productService.getAllProducts(thePage,pageable);
     }
 
     @GetMapping(path="/products/{id}")
@@ -49,9 +50,35 @@ public class ProductController {
         return productService.updateProduct(product);
     }
 
-    @RequestMapping(path="/products/search")
-    public List<Product> searchProduct(@Param("keyword") String keyword) {
-        return productService.getAllProducts(keyword);
+    @GetMapping(path="/products/search")
+    public List<Product> searchProduct(@RequestParam("keyword") String keyword, @RequestParam Optional<Integer> page) {
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return productService.searchProduct(keyword,thePage,pageable);
+    }
+
+    @GetMapping(path="/products/search/filter")
+    public List<Product> searchProductBy(@RequestParam Optional<String> name, @RequestParam Optional<String> model, @RequestParam Optional<String> brand, @RequestParam Optional<String> company, @RequestParam Optional<String> description, @RequestParam Optional<BigDecimal> minprice, @RequestParam Optional<BigDecimal> maxprice, @RequestParam Optional<Integer> page){
+        String newname, newmodel, newbrand, newcompany, newdescript;
+        BigDecimal newmin, newmax;
+        newname = name.orElse(null);
+        newmodel = model.orElse(null);
+        newbrand = brand.orElse(null);
+        newcompany = company.orElse(null);
+        newdescript = description.orElse(null);
+        newmin = minprice.orElse(null);
+        newmax = maxprice.orElse(null);
+        boolean pageable;
+        int thePage = 0;
+        pageable = page.isPresent();
+        if(page.isPresent()){
+            thePage = page.get();
+        }
+        return productService.searchProductBy(newname,newmodel,newbrand,newcompany,newdescript,newmin,newmax,thePage,pageable);
     }
 
     /*@PutMapping(path="/products")

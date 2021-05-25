@@ -57,7 +57,7 @@ public class OrderController {
         return orderService.updateOrder(order);
     }
 
-    @GetMapping(path="/orders/search")
+    @GetMapping(path="/orders/search/filter")
     public List<Order> searchOrderBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);

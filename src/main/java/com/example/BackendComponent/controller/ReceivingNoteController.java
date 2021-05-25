@@ -33,7 +33,7 @@ public class ReceivingNoteController {
         return receivingNoteService.getReceivingNoteByID(id);
     }
 
-    @GetMapping(path="/receive/update/{id}")
+    @PutMapping(path="/receive/update/{id}")
     public ReceivingNote quickUpdateReceivingNote(@PathVariable Long id){
         return receivingNoteService.quickUpdateReceivingNote(id);
     }
@@ -53,7 +53,7 @@ public class ReceivingNoteController {
         return receivingNoteService.updateReceivingNote(receivingNote);
     }
 
-    @GetMapping(path="/receive/search")
+    @GetMapping(path="/receive/search/filter")
     public List<ReceivingNote> searchReceivingNoteBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);

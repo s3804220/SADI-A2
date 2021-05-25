@@ -47,12 +47,12 @@ public class SaleInvoiceController {
         return saleInvoiceService.updateSaleInvoice(saleInvoice);
     }
 
-    @GetMapping(path="/sales/update/{id}")
+    @PutMapping(path="/sales/update/{id}")
     public SaleInvoice quickUpdateSaleInvoice(@PathVariable Long id){
         return saleInvoiceService.quickUpdateSaleInvoice(id);
     }
 
-    @GetMapping(path="/sales/search")
+    @GetMapping(path="/sales/search/filter")
     public List<SaleInvoice> searchSaleBy(@RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
@@ -66,7 +66,7 @@ public class SaleInvoiceController {
         return saleInvoiceService.searchSaleBy(fromdate, todate, thePage, pageable);
     }
 
-    @GetMapping(path="/sales/staff/{id}/search")
+    @GetMapping(path="/sales/staff/{id}/filter")
     public List<SaleInvoice> searchSaleByStaff(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
@@ -80,7 +80,7 @@ public class SaleInvoiceController {
         return saleInvoiceService.searchSaleByStaff(fromdate, todate, id, thePage, pageable);
     }
 
-    @GetMapping(path="/sales/customer/{id}/search")
+    @GetMapping(path="/sales/customer/{id}/filter")
     public List<SaleInvoice> searchSaleByCustomer(@PathVariable Long id, @RequestParam Optional<String> start, @RequestParam Optional<String> end, @RequestParam Optional<Integer> page){
         LocalDate fromdate, todate;
         fromdate = start.map(LocalDate::parse).orElse(null);
