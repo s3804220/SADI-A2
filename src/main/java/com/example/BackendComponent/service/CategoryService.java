@@ -19,7 +19,8 @@ import com.example.BackendComponent.entity.*;
 
 @Transactional
 @Service
-public class CategoryService {
+public class
+CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
