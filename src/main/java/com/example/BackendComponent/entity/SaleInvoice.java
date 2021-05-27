@@ -97,8 +97,8 @@ public class SaleInvoice {
     @PrePersist
     @PreUpdate
     public void setPrice(){
+        totalPrice = BigDecimal.ZERO;
         if(saleDetails != null){
-            totalPrice = BigDecimal.ZERO;
             for(SaleDetail aDetail : saleDetails){
                 if(aDetail.getTotalValue() != null){
                     totalPrice = totalPrice.add(aDetail.getTotalValue());

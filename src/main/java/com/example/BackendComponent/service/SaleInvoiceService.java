@@ -1,10 +1,13 @@
 package com.example.BackendComponent.service;
 
 import com.example.BackendComponent.entity.Order;
+import com.example.BackendComponent.entity.Product;
 import com.example.BackendComponent.entity.SaleDetail;
 import com.example.BackendComponent.entity.SaleInvoice;
 import com.example.BackendComponent.exception.SaleInvoiceAlreadyExistException;
 import com.example.BackendComponent.exception.SaleInvoiceNotFoundException;
+import com.example.BackendComponent.repository.ProductRepository;
+import com.example.BackendComponent.repository.SaleDetailRepository;
 import com.example.BackendComponent.repository.SaleInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +40,7 @@ public class SaleInvoiceService {
 
     public SaleInvoice updateSaleInvoice(SaleInvoice saleInvoice){
         if(saleInvoiceRepository.existsById(saleInvoice.getSaleID())){
-            SaleInvoice saleInvoice1 = saleInvoiceRepository.getOne(saleInvoice.getSaleID());
+            /*SaleInvoice saleInvoice1 = saleInvoiceRepository.getOne(saleInvoice.getSaleID());
             BigDecimal totalPrice = BigDecimal.ZERO;
             if(saleInvoice1.getSaleDetails() != null){
                 Set<SaleDetail> saleDetailSet = saleInvoice1.getSaleDetails();
@@ -48,7 +51,27 @@ public class SaleInvoiceService {
                     totalPrice = totalPrice.add(totalValue);
                 }
             }
-            saleInvoice.setTotalPrice(totalPrice);
+            saleInvoice.setTotalPrice(totalPrice);*/
+            /*BigDecimal totalPrice = BigDecimal.ZERO;
+            if(saleInvoice.getSaleDetails() != null){
+                Set<SaleDetail> saleDetailSet = saleInvoice.getSaleDetails();
+                for(SaleDetail saleDetail : saleDetailSet){
+                    BigDecimal productPrice = BigDecimal.ZERO;
+                    int productQuantity;
+                    if(saleDetailRepository.existsById(saleDetail.getSaleDetailID()) && saleDetail.getSaleQuantity() == 0 && saleDetail.getSaleProduct() == null){
+                        SaleDetail saleDetail1 = saleDetailRepository.getOne(saleDetail.getSaleDetailID());
+                        Product product = productRepository.getOne(saleDetail1.getSaleProduct().getProductID());
+                        productPrice = product.getPrice();
+                        productQuantity = saleDetail1.getSaleQuantity();
+                    }else{
+                        Product product = productRepository.getOne(saleDetail.getSaleProduct().getProductID());
+                        productPrice = product.getPrice();
+                        productQuantity = saleDetail.getSaleQuantity();
+                    }
+                    BigDecimal totalValue = productPrice.multiply(BigDecimal.valueOf(productQuantity));
+                    totalPrice = totalPrice.add(totalValue);
+                }
+            }*/
             saleInvoiceRepository.save(saleInvoice);
         }else {
             throw new SaleInvoiceNotFoundException(saleInvoice.getSaleID());
@@ -58,7 +81,22 @@ public class SaleInvoiceService {
 
     public SaleInvoice quickUpdateSaleInvoice(Long id){
         SaleInvoice saleInvoiceToUpdate = getSaleInvoiceById(id);
-        return updateSaleInvoice(saleInvoiceToUpdate);
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        if(saleInvoiceToUpdate.getSaleDetails() != null){
+            Set<SaleDetail> saleDetailSet = saleInvoiceToUpdate.getSaleDetails();
+            for(SaleDetail saleDetail : saleDetailSet){
+                BigDecimal productPrice = BigDecimal.ZERO;
+                if(saleDetail.getSaleProduct() != null){
+                    productPrice = saleDetail.getSaleProduct().getPrice();
+                }
+                int productQuantity = saleDetail.getSaleQuantity();
+                BigDecimal totalValue = productPrice.multiply(BigDecimal.valueOf(productQuantity));
+                totalPrice = totalPrice.add(totalValue);
+            }
+        }
+        saleInvoiceToUpdate.setTotalPrice(totalPrice);
+        saleInvoiceRepository.save(saleInvoiceToUpdate);
+        return saleInvoiceToUpdate;
     }
 
     public List<SaleInvoice> getAllSaleInvoice(int page, boolean pageBool){
