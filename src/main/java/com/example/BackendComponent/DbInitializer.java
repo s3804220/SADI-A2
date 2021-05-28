@@ -3,12 +3,14 @@ package com.example.BackendComponent;
 import com.example.BackendComponent.entity.*;
 import com.example.BackendComponent.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Component
+@ConditionalOnProperty(name = "app.init-db", havingValue = "true")
 public class DbInitializer implements CommandLineRunner {
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
@@ -18,8 +20,11 @@ public class DbInitializer implements CommandLineRunner {
     private OrderRepository orderRepository;
     private OrderDetailRepository orderDetailRepository;
     private DeliveryNoteRepository deliveryNoteRepository;
+    private DeliveryDetailRepository deliveryDetailRepository;
+    private ReceivingNoteRepository receivingNoteRepository;
+    private ReceivingDetailRepository receivingDetailRepository;
 
-    DbInitializer(CategoryRepository categoryRepository, ProductRepository productRepository, CustomerRepository customerRepository, ProviderRepository providerRepository, StaffRepository staffRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, DeliveryNoteRepository deliveryNoteRepository) {
+    DbInitializer(CategoryRepository categoryRepository, ProductRepository productRepository, CustomerRepository customerRepository, ProviderRepository providerRepository, StaffRepository staffRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, DeliveryNoteRepository deliveryNoteRepository, DeliveryDetailRepository deliveryDetailRepository, ReceivingNoteRepository receivingNoteRepository, ReceivingDetailRepository receivingDetailRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
@@ -28,11 +33,17 @@ public class DbInitializer implements CommandLineRunner {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.deliveryNoteRepository = deliveryNoteRepository;
+        this.deliveryDetailRepository = deliveryDetailRepository;
+        this.receivingNoteRepository = receivingNoteRepository;
+        this.receivingDetailRepository = receivingDetailRepository;
     }
     @Override
     public void run(String... args) throws Exception {
-        this.deliveryNoteRepository.deleteAll();
+        this.receivingDetailRepository.deleteAll();
+        this.deliveryDetailRepository.deleteAll();
         this.orderDetailRepository.deleteAll();
+        this.receivingNoteRepository.deleteAll();
+        this.deliveryNoteRepository.deleteAll();
         this.orderRepository.deleteAll();
         this.productRepository.deleteAll();
         this.categoryRepository.deleteAll();
@@ -47,6 +58,7 @@ public class DbInitializer implements CommandLineRunner {
         Staff staff1 = new Staff(1L, "Suzie Nguyen", "303 Flower Boulevard", "0658794158", "astaff@mycompany.com");
         Order order1 = new Order(1L, LocalDate.of(2021, 03, 17), staff1, provider1);
         OrderDetail orderDetail1 = new OrderDetail(1L, product1, 20, new BigDecimal(19980), order1);
+        DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 04, 17), staff1);
 
 
         this.categoryRepository.save(category1);
@@ -56,5 +68,6 @@ public class DbInitializer implements CommandLineRunner {
         this.staffRepository.save(staff1);
         this.orderRepository.save(order1);
         this.orderDetailRepository.save(orderDetail1);
+        this.deliveryNoteRepository.save(deliveryNote1);
     }
 }

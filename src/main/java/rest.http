@@ -1,2 +1,2 @@
-GET http://localhost:8080/api/receive/update/1L
+GET http://localhost:8080/api/orderdetail
 Content-Type: application/json
