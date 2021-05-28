@@ -42,7 +42,8 @@ class BackendComponentApplicationTests {
 	private ReceivingDetailService receivingDetailService;
 	@Autowired
 	private DeliveryNoteService deliveryNoteService;
-
+	@Autowired
+	private DeliveryDetailService deliveryDetailService;
 
 	@Test
 	@org.junit.jupiter.api.Order(1)
@@ -187,6 +188,59 @@ class BackendComponentApplicationTests {
 		receivingNote2.setReceiveStaff(staffService.getStaffByID(1L));
 		receivingNoteService.updateReceivingNote(receivingNote2);
 		assertEquals(receivingNote2.getReceiveStaff().getStaffID(), receivingNoteService.getReceivingNoteByID(2L).getReceiveStaff().getStaffID());
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(9)
+	void ReceivingDetailTests() {
+		ReceivingDetail receivingDetail1 = receivingDetailService.getReceivingDetailByID(1L);
+		ReceivingDetail receivingDetail2 = receivingDetailService.getReceivingDetailByID(2L);
+		assertThrows(ReceivingDetailNotFoundException.class, () -> {
+			receivingDetailService.deleteReceivingDetail(2L);
+			receivingDetailService.getReceivingDetailByID(2L);
+		});
+		assertEquals(receivingDetail2, receivingDetailService.addReceivingDetail(receivingDetail2));
+		assertEquals(receivingDetail2.getReceivingNote().getReceivingNoteID(), receivingDetailService.getReceivingDetailByID(2L).getReceivingNote().getReceivingNoteID());
+		assertThrows(ReceivingDetailAlreadyExistException.class, () -> receivingDetailService.addReceivingDetail(receivingDetail1));
+		receivingDetail2.setReceiveQuantity(200);
+		receivingDetailService.updateReceivingDetail(receivingDetail2);
+		assertEquals(receivingDetail2.getReceiveQuantity(), receivingDetailService.getReceivingDetailByID(2L).getReceiveQuantity());
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(10)
+	void DeliveryNoteTests() {
+		DeliveryNote deliveryNote1 = deliveryNoteService.getDeliveryNoteByID(1L);
+		DeliveryNote deliveryNote2 = new DeliveryNote(2L, LocalDate.of(2021, 5, 17), staffService.getStaffByID(2L));
+		assertEquals(deliveryNote2, deliveryNoteService.addDeliveryNote(deliveryNote2));
+		assertEquals(deliveryNote2.getDeliveryDate(), deliveryNoteService.getDeliveryNoteByID(2L).getDeliveryDate());
+		assertThrows(DeliveryNoteAlreadyExistException.class, () -> deliveryNoteService.addDeliveryNote(deliveryNote1));
+		assertThrows(DeliveryNoteNotFoundException.class, () -> {
+			deliveryNoteService.deleteDeliveryNote(2L);
+			deliveryNoteService.getDeliveryNoteByID(2L);
+		});
+		deliveryNoteService.addDeliveryNote(deliveryNote2);
+		deliveryNote2.setDeliveryDate(LocalDate.of(2021, 7, 3));
+		deliveryNoteService.updateDeliveryNote(deliveryNote2);
+		assertEquals(deliveryNote2.getDeliveryDate(), deliveryNoteService.getDeliveryNoteByID(2L).getDeliveryDate());
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(10)
+	void DeliveryDetailTests() {
+		DeliveryDetail deliveryDetail1 = deliveryDetailService.getDeliveryDetailByID(1L);
+		DeliveryDetail deliveryDetail2 = new DeliveryDetail(2L, productService.getProductById(2L), 20, deliveryNoteService.getDeliveryNoteByID(2L));
+		assertEquals(deliveryDetail2, deliveryDetailService.addDeliveryDetail(deliveryDetail2));
+		assertEquals(deliveryDetail2.getDeliveryNote().getDeliveryNoteID(), deliveryDetailService.getDeliveryDetailByID(2L).getDeliveryNote().getDeliveryNoteID());
+		assertThrows(DeliveryDetailAlreadyExistException.class, () -> deliveryDetailService.addDeliveryDetail(deliveryDetail1));
+		assertThrows(DeliveryDetailNotFoundException.class, () -> {
+			deliveryDetailService.deleteDeliveryDetail(2L);
+			deliveryDetailService.getDeliveryDetailByID(2L);
+		});
+		deliveryDetailService.addDeliveryDetail(deliveryDetail2);
+		deliveryDetail2.setDeliveryProduct(productService.getProductById(2L));
+		deliveryDetailService.updateDeliveryDetail(deliveryDetail2);
+		assertEquals(deliveryDetail2.getDeliveryProduct().getProductID(), deliveryDetailService.getDeliveryDetailByID(2L).getDeliveryProduct().getProductID());
 	}
 
 }

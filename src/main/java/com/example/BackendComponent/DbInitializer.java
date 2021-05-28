@@ -47,6 +47,8 @@ public class DbInitializer implements CommandLineRunner {
     private ReceivingDetailService receivingDetailService;
     @Autowired
     private DeliveryNoteService deliveryNoteService;
+    @Autowired
+    private DeliveryDetailService deliveryDetailService;
 
     DbInitializer(CategoryRepository categoryRepository, ProductRepository productRepository, CustomerRepository customerRepository, ProviderRepository providerRepository, StaffRepository staffRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, DeliveryNoteRepository deliveryNoteRepository, DeliveryDetailRepository deliveryDetailRepository, ReceivingNoteRepository receivingNoteRepository, ReceivingDetailRepository receivingDetailRepository) {
         this.categoryRepository = categoryRepository;
@@ -71,8 +73,10 @@ public class DbInitializer implements CommandLineRunner {
         for (ReceivingDetail temp: receivingDetailList) {
             receivingDetailService.deleteReceivingDetail(temp.getReceivingDetailID());
         }
-        this.deliveryDetailRepository.deleteAll();
-        this.receivingDetailRepository.deleteAll();
+        List<DeliveryDetail> deliveryDetailList = deliveryDetailService.getAllDeliveryDetails(0, false);
+        for (DeliveryDetail temp: deliveryDetailList) {
+            deliveryDetailService.deleteDeliveryDetail(temp.getDeliveryDetailID());
+        }
         this.receivingNoteRepository.deleteAll();
         this.deliveryNoteRepository.deleteAll();
         this.orderRepository.deleteAll();
@@ -87,11 +91,11 @@ public class DbInitializer implements CommandLineRunner {
         Customer customer1 = new Customer(1L, "Hannah", "123 Abc str", "0298145237", "13235551234", "cus1@email.com", "That Guy");
         Provider provider1 = new Provider(1L, "AAA Retail", "546 London Street", "0984756954", "152495118934", "prov1@game.co", "Keanu Reeves");
         Staff staff1 = new Staff(1L, "Suzie Nguyen", "303 Flower Boulevard", "0658794158", "astaff@mycompany.com");
-        Order order1 = new Order(1L, LocalDate.of(2021, 03, 17), staff1, provider1);
+        Order order1 = new Order(1L, LocalDate.of(2021, 3, 17), staff1, provider1);
         OrderDetail orderDetail1 = new OrderDetail(1L, product1, 20, new BigDecimal(19980), order1);
-        ReceivingNote receivingNote1 = new ReceivingNote(1L, LocalDate.of(2021,03,18), staff1, order1);
-        DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 04, 17), staff1);
-
+        ReceivingNote receivingNote1 = new ReceivingNote(1L, LocalDate.of(2021,3,18), staff1, order1);
+        DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 4, 17), staff1);
+        DeliveryDetail deliveryDetail1 = new DeliveryDetail(1L, product1, 20, deliveryNote1);
 
         categoryService.addCategory(category1);
         productService.addProduct(product1);
@@ -102,5 +106,6 @@ public class DbInitializer implements CommandLineRunner {
         orderDetailService.addOrderDetail(orderDetail1);
         receivingNoteService.addReceivingNote(receivingNote1);
         deliveryNoteService.addDeliveryNote(deliveryNote1);
+        deliveryDetailService.addDeliveryDetail(deliveryDetail1);
     }
 }

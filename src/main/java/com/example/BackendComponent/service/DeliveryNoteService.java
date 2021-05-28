@@ -3,6 +3,7 @@ package com.example.BackendComponent.service;
 import com.example.BackendComponent.entity.DeliveryNote;
 import com.example.BackendComponent.entity.Order;
 import com.example.BackendComponent.entity.ReceivingNote;
+import com.example.BackendComponent.exception.DeliveryNoteAlreadyExistException;
 import com.example.BackendComponent.exception.DeliveryNoteNotFoundException;
 import com.example.BackendComponent.exception.ReceivingNoteAlreadyExistException;
 import com.example.BackendComponent.exception.ReceivingNoteNotFoundException;
@@ -29,7 +30,7 @@ public class DeliveryNoteService {
         if (!deliveryNoteRepository.existsById(deliveryNote.getDeliveryNoteID())){
             deliveryNoteRepository.save(deliveryNote);
         }else{
-            throw new ReceivingNoteAlreadyExistException(deliveryNote.getDeliveryNoteID());
+            throw new DeliveryNoteAlreadyExistException(deliveryNote.getDeliveryNoteID());
         }
         return deliveryNote;
     }
@@ -38,7 +39,7 @@ public class DeliveryNoteService {
         if (deliveryNoteRepository.existsById(deliveryNote.getDeliveryNoteID())){
             deliveryNoteRepository.save(deliveryNote);
         }else {
-            throw new ReceivingNoteNotFoundException(deliveryNote.getDeliveryNoteID());
+            throw new DeliveryNoteNotFoundException(deliveryNote.getDeliveryNoteID());
         }
         return deliveryNote;
     }
