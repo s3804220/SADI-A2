@@ -39,9 +39,9 @@ public class DbInitializer implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        this.receivingDetailRepository.deleteAll();
-        this.deliveryDetailRepository.deleteAll();
         this.orderDetailRepository.deleteAll();
+        this.deliveryDetailRepository.deleteAll();
+        this.receivingDetailRepository.deleteAll();
         this.receivingNoteRepository.deleteAll();
         this.deliveryNoteRepository.deleteAll();
         this.orderRepository.deleteAll();
@@ -57,7 +57,7 @@ public class DbInitializer implements CommandLineRunner {
         Provider provider1 = new Provider(1L, "AAA Retail", "546 London Street", "0984756954", "152495118934", "prov@game.co", "Keanu Reeves");
         Staff staff1 = new Staff(1L, "Suzie Nguyen", "303 Flower Boulevard", "0658794158", "astaff@mycompany.com");
         Order order1 = new Order(1L, LocalDate.of(2021, 03, 17), staff1, provider1);
-        OrderDetail orderDetail1 = new OrderDetail(1L, product1, 20, new BigDecimal(19980), order1);
+        ReceivingNote receivingNote1 = new ReceivingNote(1L, LocalDate.of(2021,03,18), staff1, order1);
         DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 04, 17), staff1);
 
 
@@ -67,7 +67,7 @@ public class DbInitializer implements CommandLineRunner {
         this.providerRepository.save(provider1);
         this.staffRepository.save(staff1);
         this.orderRepository.save(order1);
-        this.orderDetailRepository.save(orderDetail1);
+        this.receivingNoteRepository.save(receivingNote1);
         this.deliveryNoteRepository.save(deliveryNote1);
     }
 }

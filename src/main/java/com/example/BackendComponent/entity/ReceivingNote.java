@@ -40,6 +40,7 @@ public class ReceivingNote {
         this.receivingNoteID = receivingNoteID;
         this.receiveDate = receiveDate;
         this.receiveStaff = receiveStaff;
+        this.receiveOrder = receiveOrder;
     }
 
     public Long getReceivingNoteID() {
