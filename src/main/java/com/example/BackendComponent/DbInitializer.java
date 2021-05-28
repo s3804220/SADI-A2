@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @ConditionalOnProperty(name = "app.init-db", havingValue = "true")
@@ -111,6 +113,9 @@ public class DbInitializer implements CommandLineRunner {
         SaleInvoice saleInvoice1 = new SaleInvoice(1L, LocalDate.of(2021, 3, 17), staff1, customer1);
         SaleDetail saleDetail1 = new SaleDetail(1L, product1, 20, saleInvoice1);
         saleDetail1.setValue();
+        Set<SaleDetail> set = new HashSet<>();
+        set.add(saleDetail1);
+        saleInvoice1.setSaleDetails(set);
         saleInvoice1.setPrice();
 
         categoryService.addCategory(category1);
@@ -124,6 +129,5 @@ public class DbInitializer implements CommandLineRunner {
         deliveryNoteService.addDeliveryNote(deliveryNote1);
         deliveryDetailService.addDeliveryDetail(deliveryDetail1);
         saleInvoiceService.addSaleInvoice(saleInvoice1);
-        saleDetailService.addSaleDetail(saleDetail1);
     }
 }

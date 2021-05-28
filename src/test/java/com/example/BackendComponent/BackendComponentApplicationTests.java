@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,6 +46,10 @@ class BackendComponentApplicationTests {
 	private DeliveryNoteService deliveryNoteService;
 	@Autowired
 	private DeliveryDetailService deliveryDetailService;
+	@Autowired
+	private SaleInvoiceService saleInvoiceService;
+	@Autowired
+	private SaleDetailService saleDetailService;
 
 	@Test
 	@org.junit.jupiter.api.Order(1)
@@ -241,6 +247,43 @@ class BackendComponentApplicationTests {
 		deliveryDetail2.setDeliveryProduct(productService.getProductById(2L));
 		deliveryDetailService.updateDeliveryDetail(deliveryDetail2);
 		assertEquals(deliveryDetail2.getDeliveryProduct().getProductID(), deliveryDetailService.getDeliveryDetailByID(2L).getDeliveryProduct().getProductID());
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(11)
+	void SaleTests() {
+		SaleInvoice saleInvoice1 = saleInvoiceService.getSaleInvoiceById(1L);
+		SaleInvoice saleInvoice2 = new SaleInvoice(2L, LocalDate.of(2021, 3, 13), staffService.getStaffByID(2L), customerService.getCustomerByID(2L));
+		SaleDetail saleDetail1 = saleDetailService.getSaleDetailByID(1L);
+		SaleDetail saleDetail2 = new SaleDetail(2L, productService.getProductById(2L), 40, saleInvoice2);
+		saleDetail2.setValue();
+		Set<SaleDetail> set = new HashSet<>();
+		set.add(saleDetail2);
+		saleInvoice2.setSaleDetails(set);
+		saleInvoice2.setPrice();
+		assertEquals(saleInvoice2, saleInvoiceService.addSaleInvoice(saleInvoice2));
+		assertEquals(saleInvoice2.getTotalPrice(), saleInvoiceService.getSaleInvoiceById(2L).getTotalPrice());
+		assertThrows(SaleInvoiceAlreadyExistException.class, () -> saleInvoiceService.addSaleInvoice(saleInvoice1));
+		assertThrows(SaleInvoiceNotFoundException.class, () -> {
+			saleInvoiceService.deleteSaleInvoice(2L);
+			saleInvoiceService.getSaleInvoiceById(2L);
+		});
+		saleInvoiceService.addSaleInvoice(saleInvoice2);
+		saleInvoice2.setSaleDate(LocalDate.of(2020, 1,3));
+		saleInvoiceService.updateSaleInvoice(saleInvoice2);
+		assertEquals(saleInvoice2.getSaleDate(), saleInvoiceService.getSaleInvoiceById(2L).getSaleDate());
+
+		assertThrows(SaleDetailNotFoundException.class, () -> {
+			saleDetailService.deleteSaleDetail(2L);
+			saleDetailService.getSaleDetailByID(2L);
+		});
+		assertEquals(saleDetail2, saleDetailService.addSaleDetail(saleDetail2));
+		assertEquals(saleDetail2.getSalePrice(), saleDetailService.getSaleDetailByID(2L).getSalePrice());
+		assertThrows(SaleDetailAlreadyExistException.class, () -> saleDetailService.addSaleDetail(saleDetail1));
+		saleDetail2.setSaleQuantity(30);
+		saleDetailService.updateSaleDetail(saleDetail2);
+		assertEquals(saleDetail2.getSaleQuantity(), saleDetailService.getSaleDetailByID(2L).getSaleQuantity());
+		assertEquals(saleDetail2.getSaleProduct().getPrice().multiply(new BigDecimal(saleDetail2.getSaleQuantity())),saleDetailService.getSaleDetailByID(2L).getTotalValue());
 	}
 
 }
