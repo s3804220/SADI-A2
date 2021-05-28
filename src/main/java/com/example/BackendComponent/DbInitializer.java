@@ -49,6 +49,10 @@ public class DbInitializer implements CommandLineRunner {
     private DeliveryNoteService deliveryNoteService;
     @Autowired
     private DeliveryDetailService deliveryDetailService;
+    @Autowired
+    private SaleInvoiceService saleInvoiceService;
+    @Autowired
+    private SaleDetailService saleDetailService;
 
     DbInitializer(CategoryRepository categoryRepository, ProductRepository productRepository, CustomerRepository customerRepository, ProviderRepository providerRepository, StaffRepository staffRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, DeliveryNoteRepository deliveryNoteRepository, DeliveryDetailRepository deliveryDetailRepository, ReceivingNoteRepository receivingNoteRepository, ReceivingDetailRepository receivingDetailRepository) {
         this.categoryRepository = categoryRepository;
@@ -77,6 +81,14 @@ public class DbInitializer implements CommandLineRunner {
         for (DeliveryDetail temp: deliveryDetailList) {
             deliveryDetailService.deleteDeliveryDetail(temp.getDeliveryDetailID());
         }
+        List<SaleInvoice> saleInvoiceList = saleInvoiceService.getAllSaleInvoice(0, false);
+        for (SaleInvoice temp: saleInvoiceList) {
+            saleInvoiceService.deleteSaleInvoice(temp.getSaleID());
+        }
+        List<SaleDetail> saleDetailList = saleDetailService.getAllSaleDetails(0, false);
+        for (SaleDetail temp: saleDetailList) {
+            saleDetailService.deleteSaleDetail(temp.getSaleDetailID());
+        }
         this.receivingNoteRepository.deleteAll();
         this.deliveryNoteRepository.deleteAll();
         this.orderRepository.deleteAll();
@@ -96,6 +108,10 @@ public class DbInitializer implements CommandLineRunner {
         ReceivingNote receivingNote1 = new ReceivingNote(1L, LocalDate.of(2021,3,18), staff1, order1);
         DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 4, 17), staff1);
         DeliveryDetail deliveryDetail1 = new DeliveryDetail(1L, product1, 20, deliveryNote1);
+        SaleInvoice saleInvoice1 = new SaleInvoice(1L, LocalDate.of(2021, 3, 17), staff1, customer1);
+        SaleDetail saleDetail1 = new SaleDetail(1L, product1, 20, saleInvoice1);
+        saleDetail1.setValue();
+        saleInvoice1.setPrice();
 
         categoryService.addCategory(category1);
         productService.addProduct(product1);
@@ -107,5 +123,7 @@ public class DbInitializer implements CommandLineRunner {
         receivingNoteService.addReceivingNote(receivingNote1);
         deliveryNoteService.addDeliveryNote(deliveryNote1);
         deliveryDetailService.addDeliveryDetail(deliveryDetail1);
+        saleInvoiceService.addSaleInvoice(saleInvoice1);
+        saleDetailService.addSaleDetail(saleDetail1);
     }
 }
