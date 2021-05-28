@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @ConditionalOnProperty(name = "app.init-db", havingValue = "true")
@@ -39,7 +40,11 @@ public class DbInitializer implements CommandLineRunner {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private OrderDetailService orderDetailService;
+    @Autowired
     private ReceivingNoteService receivingNoteService;
+    @Autowired
+    private ReceivingDetailService receivingDetailService;
     @Autowired
     private DeliveryNoteService deliveryNoteService;
 
@@ -58,7 +63,14 @@ public class DbInitializer implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        this.orderDetailRepository.deleteAll();
+        List<OrderDetail> orderList = orderDetailService.getAllOrderDetails(0, false);
+        for (OrderDetail temp: orderList) {
+            orderDetailService.deleteOrderDetail(temp.getOrderDetailID());
+        }
+        List<ReceivingDetail> receivingDetailList = receivingDetailService.getAllReceivingDetails(0, false);
+        for (ReceivingDetail temp: receivingDetailList) {
+            receivingDetailService.deleteReceivingDetail(temp.getReceivingDetailID());
+        }
         this.deliveryDetailRepository.deleteAll();
         this.receivingDetailRepository.deleteAll();
         this.receivingNoteRepository.deleteAll();
@@ -76,6 +88,7 @@ public class DbInitializer implements CommandLineRunner {
         Provider provider1 = new Provider(1L, "AAA Retail", "546 London Street", "0984756954", "152495118934", "prov1@game.co", "Keanu Reeves");
         Staff staff1 = new Staff(1L, "Suzie Nguyen", "303 Flower Boulevard", "0658794158", "astaff@mycompany.com");
         Order order1 = new Order(1L, LocalDate.of(2021, 03, 17), staff1, provider1);
+        OrderDetail orderDetail1 = new OrderDetail(1L, product1, 20, new BigDecimal(19980), order1);
         ReceivingNote receivingNote1 = new ReceivingNote(1L, LocalDate.of(2021,03,18), staff1, order1);
         DeliveryNote deliveryNote1 = new DeliveryNote(1L, LocalDate.of(2021, 04, 17), staff1);
 
@@ -86,6 +99,7 @@ public class DbInitializer implements CommandLineRunner {
         providerService.addProvider(provider1);
         staffService.addStaff(staff1);
         orderService.addOrder(order1);
+        orderDetailService.addOrderDetail(orderDetail1);
         receivingNoteService.addReceivingNote(receivingNote1);
         deliveryNoteService.addDeliveryNote(deliveryNote1);
     }
