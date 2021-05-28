@@ -22,6 +22,19 @@ class BackendComponentApplicationTests {
 	private CategoryController categoryController;
 	@Autowired
 	private ProductController productController;
+	@Autowired
+	private CustomerController customerController;
+	@Autowired
+	private ProviderService providerService;
+	@Autowired
+	private StaffService staffService;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private ReceivingNoteService receivingNoteService;
+	@Autowired
+	private DeliveryNoteService deliveryNoteService;
+
 
 	@Test
 	void CategoryTests() {
@@ -49,5 +62,32 @@ class BackendComponentApplicationTests {
 		assertEquals(product2, productController.addProduct(product2));
 		assertEquals(product2.getProductName(), productController.getProductById(2L).getProductName());
 		assertThrows(ProductAlreadyExistException.class, () -> productController.addProduct(product1));
+		assertThrows(ProductNotFoundException.class, () -> {
+			productController.deleteProduct(2L);
+			productController.getProductById(2L);
+		});
+		productController.addProduct(product2);
+		product2.setProductName("Laptop");
+		productController.updateProduct(product2);
+		assertEquals(product2.getProductName(), productController.getProductById(2L).getProductName());
 	}
+
+	@Test
+	void CustomerTests() {
+		Customer customer1 = new Customer(1L, "Hannah", "123 Abc str", "0298145237", "13235551234", "cus1@email.com", "That Guy");
+		Customer customer2 = new Customer(2L, "Dennis", "456 Cdb str", "1309256348", "13156781319", "cus2@email.com", "That Girl");
+		assertEquals(customer2, customerController.addCustomer(customer2));
+		assertEquals(customer2.getCustomerName(), customerController.getCustomerByID(2L).getCustomerName());
+		assertThrows(CustomerAlreadyExistException.class, () -> customerController.addCustomer(customer1));
+		assertThrows(CustomerNotFoundException.class, () -> {
+			customerController.deleteCustomer(2L);
+			customerController.getCustomerByID(2L);
+		});
+		customerController.addCustomer(customer2);
+		customer2.setCustomerName("Laptop");
+		customerController.updateCustomer(customer2);
+		assertEquals(customer2.getCustomerName(), customerController.getCustomerByID(2L).getCustomerName());
+	}
+
+	
 }
