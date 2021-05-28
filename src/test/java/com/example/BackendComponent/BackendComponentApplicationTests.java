@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,6 +51,8 @@ class BackendComponentApplicationTests {
 	private SaleInvoiceService saleInvoiceService;
 	@Autowired
 	private SaleDetailService saleDetailService;
+	@Autowired
+	private UnifiedService unifiedService;
 
 	@Test
 	@org.junit.jupiter.api.Order(1)
@@ -285,5 +288,16 @@ class BackendComponentApplicationTests {
 		assertEquals(saleDetail2.getSaleQuantity(), saleDetailService.getSaleDetailByID(2L).getSaleQuantity());
 		assertEquals(saleDetail2.getSaleProduct().getPrice().multiply(new BigDecimal(saleDetail2.getSaleQuantity())),saleDetailService.getSaleDetailByID(2L).getTotalValue());
 	}
-
+	@Test
+	@org.junit.jupiter.api.Order(12)
+	void UnifiedTests() {
+		List<SaleInvoice> saleList = saleInvoiceService.getAllSaleInvoice(0, false);
+		BigDecimal revenue = new BigDecimal(0);
+		for (SaleInvoice temp : saleList) {
+			revenue = revenue.add(temp.getTotalPrice());
+		}
+		String revenueString = unifiedService.getRevenue(LocalDate.of(2020,1,1), LocalDate.of(2021,12,31)).get(0).toString();
+		Double revenueInt = Double.parseDouble(revenueString.substring(revenueString.lastIndexOf(" ")+1, revenueString.length()-1).replace(",",""));
+		assertEquals(revenue.doubleValue(), revenueInt);
+	}
 }
