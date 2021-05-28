@@ -43,7 +43,7 @@ public class CustomerService {
     public List<Customer> getAllCustomer(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -53,7 +53,7 @@ public class CustomerService {
     public List<Customer> searchCustomer(String keyword,int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -63,7 +63,7 @@ public class CustomerService {
     public List<Customer> searchCustomerBy(String name, String address, String phone, String fax, String email, String contact, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

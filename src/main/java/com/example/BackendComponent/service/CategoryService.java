@@ -37,7 +37,7 @@ CategoryService {
     public List<Category> getAllCategories(int page, boolean pageBool) {
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -47,7 +47,7 @@ CategoryService {
     public List<Category> searchCategory(String keyword,int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -57,7 +57,7 @@ CategoryService {
     public List<Category> searchCategoryBy(String name, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

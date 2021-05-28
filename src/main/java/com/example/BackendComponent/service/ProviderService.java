@@ -40,7 +40,7 @@ public class ProviderService {
     public List<Provider> getAllProvider(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -50,7 +50,7 @@ public class ProviderService {
     public List<Provider> searchProvider(String keyword, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -60,7 +60,7 @@ public class ProviderService {
     public List<Provider> searchProviderBy(String name, String address, String phone, String fax, String email, String contact, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

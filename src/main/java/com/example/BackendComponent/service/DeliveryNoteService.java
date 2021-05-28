@@ -47,7 +47,7 @@ public class DeliveryNoteService {
     public List<DeliveryNote> getAllDeliveryNotes(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -83,7 +83,7 @@ public class DeliveryNoteService {
         }
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

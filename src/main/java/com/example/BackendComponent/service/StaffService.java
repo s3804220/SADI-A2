@@ -43,7 +43,7 @@ public class StaffService {
     public List<Staff> getAllStaffs(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -64,7 +64,7 @@ public class StaffService {
     public List<Staff> searchStaff(String keyword, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -74,7 +74,7 @@ public class StaffService {
     public List<Staff> searchStaffBy(String name, String address, String phone, String email, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

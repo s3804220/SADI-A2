@@ -96,7 +96,7 @@ public class ReceivingNoteService {
     public List<ReceivingNote> getAllReceivingNotes(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -132,7 +132,7 @@ public class ReceivingNoteService {
         }
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

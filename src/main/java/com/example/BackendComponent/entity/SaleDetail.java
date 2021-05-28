@@ -91,6 +91,8 @@ public class SaleDetail {
     @PrePersist
     @PreUpdate
     public void setValue(){
+        salePrice = BigDecimal.ZERO;
+        totalValue = BigDecimal.ZERO;
         if(saleProduct != null){
             salePrice = saleProduct.getPrice();
             totalValue = salePrice.multiply(BigDecimal.valueOf(saleQuantity));

@@ -37,7 +37,7 @@ public class SaleInvoiceService {
 
     public SaleInvoice updateSaleInvoice(SaleInvoice saleInvoice){
         if(saleInvoiceRepository.existsById(saleInvoice.getSaleID())){
-            SaleInvoice saleInvoice1 = saleInvoiceRepository.getOne(saleInvoice.getSaleID());
+            /*SaleInvoice saleInvoice1 = saleInvoiceRepository.getOne(saleInvoice.getSaleID());
             BigDecimal totalPrice = BigDecimal.ZERO;
             if(saleInvoice1.getSaleDetails() != null){
                 Set<SaleDetail> saleDetailSet = saleInvoice1.getSaleDetails();
@@ -48,7 +48,7 @@ public class SaleInvoiceService {
                     totalPrice = totalPrice.add(totalValue);
                 }
             }
-            saleInvoice.setTotalPrice(totalPrice);
+            saleInvoice.setTotalPrice(totalPrice);*/
             saleInvoiceRepository.save(saleInvoice);
         }else {
             throw new SaleInvoiceNotFoundException(saleInvoice.getSaleID());
@@ -58,13 +58,28 @@ public class SaleInvoiceService {
 
     public SaleInvoice quickUpdateSaleInvoice(Long id){
         SaleInvoice saleInvoiceToUpdate = getSaleInvoiceById(id);
-        return updateSaleInvoice(saleInvoiceToUpdate);
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        if(saleInvoiceToUpdate.getSaleDetails() != null){
+            Set<SaleDetail> saleDetailSet = saleInvoiceToUpdate.getSaleDetails();
+            for(SaleDetail saleDetail : saleDetailSet){
+                BigDecimal productPrice = BigDecimal.ZERO;
+                if(saleDetail.getSaleProduct() != null){
+                    productPrice = saleDetail.getSaleProduct().getPrice();
+                }
+                int productQuantity = saleDetail.getSaleQuantity();
+                BigDecimal totalValue = productPrice.multiply(BigDecimal.valueOf(productQuantity));
+                totalPrice = totalPrice.add(totalValue);
+            }
+        }
+        saleInvoiceToUpdate.setTotalPrice(totalPrice);
+        saleInvoiceRepository.save(saleInvoiceToUpdate);
+        return saleInvoiceToUpdate;
     }
 
     public List<SaleInvoice> getAllSaleInvoice(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -100,7 +115,7 @@ public class SaleInvoiceService {
         }
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -125,7 +140,7 @@ public class SaleInvoiceService {
         }
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -150,7 +165,7 @@ public class SaleInvoiceService {
         }
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

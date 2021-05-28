@@ -40,7 +40,7 @@ public class ProductService {
     public List<Product> getAllProducts(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -50,7 +50,7 @@ public class ProductService {
     public List<Product> searchProduct(String keyword, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
@@ -60,7 +60,7 @@ public class ProductService {
     public List<Product> searchProductBy(String name, String model, String brand, String company, String description, BigDecimal minprice, BigDecimal maxprice, int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }

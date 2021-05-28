@@ -46,7 +46,7 @@ public class ReceivingDetailService {
     public List<ReceivingDetail> getAllReceivingDetails(int page, boolean pageBool){
         Pageable pageable;
         if(pageBool){
-            pageable = PageRequest.of(page, 3);
+            pageable = PageRequest.of(page, 5);
         }else{
             pageable = Pageable.unpaged();
         }
